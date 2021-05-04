@@ -51,8 +51,9 @@ const updateUser = async (req, res) => {
       if (password) {
         user.password = password;
       }
-      const updated = await user.save();
-      res.json(updated.user);
+      user.updated = Date.now();
+      const modified = await user.save();
+      res.json(modified.user);
     }
   } catch (err) {
     console.lerror(err.message);
