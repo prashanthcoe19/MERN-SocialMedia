@@ -18,8 +18,7 @@ const login = async (req, res) => {
         id: user.id,
       },
     };
-    // const token =
-    jwt.sign(
+    const token = jwt.sign(
       payload,
       config.get('jwtSecret'),
       {
@@ -30,9 +29,9 @@ const login = async (req, res) => {
         res.json({ token });
       }
     );
-    // res.cookie('t', token, {
-    //   expire: new Date() + 9999,
-    // });
+    res.cookie('t', token, {
+      expire: new Date() + 9999,
+    });
   } catch (err) {
     console.error(error.message);
     res.status(500).send('Server Error');
