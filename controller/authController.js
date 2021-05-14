@@ -26,7 +26,7 @@ const login = async (req, res) => {
       },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ user, token });
       }
     );
     res.cookie('t', token, {

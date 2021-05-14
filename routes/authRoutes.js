@@ -5,7 +5,7 @@ import authController from '../controller/authController.js';
 import auth from '../middleware/auth.js';
 
 router
-  .route('/signin')
+  .route('/')
   .post(validator.signin, authController.login)
   .get(auth, authController.getloggedInUser);
 

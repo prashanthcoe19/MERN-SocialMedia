@@ -3,12 +3,8 @@ import config from 'config';
 
 const auth = (req, res, next) => {
   //get token from header
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+
+  const token = req.header('x-auth-token');
   //check if not token
 
   if (!token) {
