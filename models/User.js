@@ -26,6 +26,25 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  bio: {
+    type: String,
+  },
+  photo: {
+    type: String,
+    trim: true,
+  },
+  following: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
