@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import config from 'config';
+// import jwt from 'jsonwebtoken';
+// import config from 'config';
 import User from '../models/User.js';
 
 const create = async (req, res) => {
@@ -74,4 +74,23 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export default { create, listUser, updateUser, deleteUser };
+const userByID = async (req, res, next, id) => {
+  try {
+    let user = await User.findById(id)
+      .populate('following', '_id name')
+      .populate('followers', '_id name')
+      .exec();
+    if (!user)
+      return res.status('400').json({
+        error: 'User not found',
+      });
+    req.profile = user;
+    next();
+  } catch (err) {
+    return res.status('400').json({
+      error: 'Could not retrieve user',
+    });
+  }
+};
+
+export default { create, listUser, updateUser, deleteUser, userByID };

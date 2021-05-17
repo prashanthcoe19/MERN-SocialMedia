@@ -2,6 +2,7 @@ import express from 'express';
 const router = express.Router();
 import validator from '../validator/validator.js';
 import userController from '../controller/userController.js';
+import postController from '../controller/postController.js';
 import auth from '../middleware/auth.js';
 
 router
@@ -13,5 +14,9 @@ router
   .route('/:userId')
   .put(auth, validator.signup, userController.updateUser)
   .delete(auth, userController.deleteUser);
+
+// router.route('/post/postId').get(postController.postByID);
+
+// router.param('userId', userController.userByID);
 
 export default router;
