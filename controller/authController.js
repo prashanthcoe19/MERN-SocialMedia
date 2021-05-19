@@ -1,39 +1,24 @@
-import jwt from 'jsonwebtoken';
-import config from 'config';
+import generateToken from '../utils/generateToken.js';
 import User from '../models/User.js';
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-
+  // console.log(password);
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
+      return res.status(400).json({ msg: 'email not found' });
     }
-    if (!user.matchPassword(password)) {
-      return res.status(400).json({ msg: "email and pwd doesn't match" });
+    if (!(await user.matchPassword(password))) {
+      return res.status(400).json({ msg: 'pwd wrong' });
     }
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-    const token = jwt.sign(
-      payload,
-      config.get('jwtSecret'),
-      {
-        expiresIn: 360000,
-      },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ user, token });
-      }
-    );
-    res.cookie('t', token, {
-      expire: new Date() + 9999,
+    res.json({
+      user,
+      token: generateToken(user.id),
     });
   } catch (err) {
-    console.error(error.message);
+    console.error(err.message);
+    console.log(user.matchPassword(password));
     res.status(500).send('Server Error');
   }
 };

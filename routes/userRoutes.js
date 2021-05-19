@@ -13,6 +13,7 @@ router
 router
   .route('/:userId')
   .put(auth, validator.signup, userController.updateUser)
+  .get(userController.userByID)
   .delete(auth, userController.deleteUser);
 
 // router.route('/post/postId').get(postController.postByID);

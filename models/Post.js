@@ -8,15 +8,15 @@ const postSchema = mongoose.Schema({
     data: Buffer,
     contentType: String,
   },
-  likes: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   comments: [
     {
       text: String,
       created: { type: Date, default: Date.now },
-      postedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+      postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     },
   ],
-  postedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   created: {
     type: Date,
     default: Date.now,

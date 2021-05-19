@@ -35,17 +35,25 @@ const userSchema = mongoose.Schema({
   },
   following: [
     {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
   ],
   followers: [
     {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
   ],
+  post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
 });
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  console.log(enteredPassword);
+  const match = await bcrypt.compare(enteredPassword, this.password);
+  // console.log(match);
+  return match;
+};
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
@@ -54,13 +62,5 @@ userSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
-
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  const isMatch = await bcrypt.compare(enteredPassword, this.password);
-  if (!isMatch) {
-    return res.status(400).send({ msg: 'Incorrect password' });
-  }
-  return isMatch;
-};
 
 export default mongoose.model('User', userSchema);

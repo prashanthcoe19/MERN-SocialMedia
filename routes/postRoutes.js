@@ -10,6 +10,6 @@ router.route('/new/:userId').post(auth, postController.create);
 router.route('/by/:userId').get(auth, postController.listByUser);
 
 // router.param('userId', userController.userByID);
-// router.get('postId', postController.postByID);
+// router.param('postId', postController.postByID);
 
 export default router;

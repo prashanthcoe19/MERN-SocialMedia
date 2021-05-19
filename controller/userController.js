@@ -74,17 +74,18 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const userByID = async (req, res, next, id) => {
+const userByID = async (req, res, next) => {
   try {
-    let user = await User.findById(id)
+    let user = await User.findById(req.params.userId)
       .populate('following', '_id name')
       .populate('followers', '_id name')
+      .populate('post', 'postedBy ')
       .exec();
     if (!user)
       return res.status('400').json({
         error: 'User not found',
       });
-    req.profile = user;
+    res.json(user);
     next();
   } catch (err) {
     return res.status('400').json({
