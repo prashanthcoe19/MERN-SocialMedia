@@ -11,9 +11,13 @@ router
   .get(userController.listUser);
 
 router
+  .route('/follow')
+  .put(auth, userController.addFollower, userController.addFollower);
+
+router
   .route('/:userId')
   .put(auth, validator.signup, userController.updateUser)
-  .get(userController.userByID)
+  // .get(userController.userByID)
   .delete(auth, userController.deleteUser);
 
 // router.route('/post/postId').get(postController.postByID);

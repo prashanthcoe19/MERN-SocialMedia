@@ -1,5 +1,7 @@
 // import jwt from 'jsonwebtoken';
 // import config from 'config';
+import pkg from 'mongoose';
+const { isValidObjectId } = pkg;
 import User from '../models/User.js';
 
 const create = async (req, res) => {
@@ -74,24 +76,66 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const userByID = async (req, res, next) => {
+// const userByID = async (req, res, next) => {
+//   try {
+//     let user = await User.findById(req.params.userId)
+//       .populate('following', '_id name')
+//       .populate('followers', '_id name')
+//       .populate('post', 'postedBy ')
+//       .exec();
+//     if (!user)
+//       return res.status('400').json({
+//         error: 'User not found',
+//       });
+//     res.json(user);
+//     next();
+//   } catch (err) {
+//     return res.status('400').json({
+//       error: 'Could not retrieve user',
+//     });
+//   }
+// };
+
+const addFollowing = async (req, res, next) => {
   try {
-    let user = await User.findById(req.params.userId)
-      .populate('following', '_id name')
-      .populate('followers', '_id name')
-      .populate('post', 'postedBy ')
-      .exec();
-    if (!user)
-      return res.status('400').json({
-        error: 'User not found',
-      });
-    res.json(user);
+    if (req.body.userId === req.body.followId) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+    await User.findByIdAndUpdate(req.body.userId, {
+      $push: { following: req.body.followId },
+    });
     next();
   } catch (err) {
-    return res.status('400').json({
-      error: 'Could not retrieve user',
-    });
+    console.log(err);
+    res.status(404).send('Error');
   }
 };
 
-export default { create, listUser, updateUser, deleteUser, userByID };
+const addFollower = async (req, res) => {
+  try {
+    if (req.body.userId === req.body.followId) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+    let result = await User.findByIdAndUpdate(
+      req.body.followId,
+      { $push: { followers: req.body.userId } },
+      { new: true }
+    )
+      .populate('following', '_id name')
+      .populate('followers', '_id name')
+      .exec();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(404).send('Error');
+  }
+};
+
+export default {
+  create,
+  listUser,
+  updateUser,
+  deleteUser,
+  addFollower,
+  addFollowing,
+};
