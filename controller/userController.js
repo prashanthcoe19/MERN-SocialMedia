@@ -1,7 +1,3 @@
-// import jwt from 'jsonwebtoken';
-// import config from 'config';
-import pkg from 'mongoose';
-const { isValidObjectId } = pkg;
 import User from '../models/User.js';
 
 const create = async (req, res) => {
@@ -17,16 +13,12 @@ const create = async (req, res) => {
       password,
     });
     await user.save();
-    res.json(user);
-    // const payload = {
-    //   user: {
-    //     id: user.id,
-    //   },
-    // };
-    // jwt.sign(payload, config.get('jwtSecret'), (err, roken) => {
-    //   if (err) throw err;
-    //   res.json({ token });
-    // });
+    res.json({
+      user,
+      token: generateToken(user.id),
+    });
+    req.user = id;
+    next();
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -63,6 +55,21 @@ const updateUser = async (req, res) => {
   }
 };
 
+const updatePicture = (req, res) => {
+  try {
+    let picture = User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $in: req.body.pic,
+      },
+      { new: true }
+    );
+    res.json(picture);
+  } catch (err) {
+    res.status(400).send('server error');
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -76,42 +83,26 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// const userByID = async (req, res, next) => {
-//   try {
-//     let user = await User.findById(req.params.userId)
-//       .populate('following', '_id name')
-//       .populate('followers', '_id name')
-//       .populate('post', 'postedBy ')
-//       .exec();
-//     if (!user)
-//       return res.status('400').json({
-//         error: 'User not found',
-//       });
-//     res.json(user);
-//     next();
-//   } catch (err) {
-//     return res.status('400').json({
-//       error: 'Could not retrieve user',
-//     });
-//   }
-// };
-
-const addFollowing = async (req, res, next) => {
+const userByID = async (req, res) => {
   try {
-    if (req.body.userId === req.body.followId) {
-      return res.status(400).json({ error: 'You cannot follow yourself' });
-    }
-    await User.findByIdAndUpdate(req.body.userId, {
-      $push: { following: req.body.followId },
-    });
-    next();
+    let user = await User.findById(req.params.userId)
+      .populate('following', '_id name')
+      .populate('followers', '_id name')
+      .populate('post', 'postedBy ')
+      .exec();
+    if (!user)
+      return res.status('400').json({
+        error: 'User not found',
+      });
+    res.json(user);
   } catch (err) {
-    console.log(err);
-    res.status(404).send('Error');
+    return res.status('400').json({
+      error: 'Could not retrieve user',
+    });
   }
 };
 
-const addFollower = async (req, res) => {
+const follow = async (req, res) => {
   try {
     if (req.body.userId === req.body.followId) {
       return res.status(400).json({ error: 'You cannot follow yourself' });
@@ -121,6 +112,55 @@ const addFollower = async (req, res) => {
       { $push: { followers: req.body.userId } },
       { new: true }
     )
+      .populate('following', '_id name')
+      .populate('followers', '_id name')
+      .exec();
+    await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $push: { following: req.body.followId },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate('following', '_id name')
+      .populate('followers', '_id name')
+      .exec();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(404).send('Error');
+  }
+};
+
+const unfollow = async (req, res) => {
+  try {
+    if (req.body.userId === req.body.followId) {
+      return res.status(400).json({ error: 'You cannot follow yourself' });
+    }
+    let result = await User.findByIdAndUpdate(
+      req.body.unfollowId,
+      {
+        $pull: { followers: req.body.userId },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate('following', '_id name')
+      .populate('followers', '_id name')
+      .exec();
+    await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $pull: { following: req.body.unfollowId },
+      },
+      {
+        new: true,
+      }
+    )
+      .select('-password')
       .populate('following', '_id name')
       .populate('followers', '_id name')
       .exec();
@@ -136,6 +176,7 @@ export default {
   listUser,
   updateUser,
   deleteUser,
-  addFollower,
-  addFollowing,
+  follow,
+  unfollow,
+  userByID,
 };

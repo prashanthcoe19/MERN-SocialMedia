@@ -37,4 +37,24 @@ const signin = [
   },
 ];
 
-export default { signup, signin };
+const post = [
+  check('text', 'Post cannot be empty').notEmpty(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+const comment = [
+  check('comments', 'Comment cannot be empty').notEmpty(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+    next();
+  },
+];
+
+export default { signup, signin, post, comment };

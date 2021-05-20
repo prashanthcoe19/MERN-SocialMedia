@@ -1,7 +1,8 @@
+import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   //get token from header
 
   const token = req.header('x-auth-token');
@@ -12,7 +13,8 @@ const auth = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, config.get('jwtSecret'));
-    req.user = decoded.user;
+    req.user = await User.findById(decoded.id).select('-password');
+    // req.user = decoded.user;
     next();
   } catch (err) {
     res.status(401).json({ msg: 'token not valid' });

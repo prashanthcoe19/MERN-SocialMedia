@@ -3,7 +3,6 @@ import User from '../models/User.js';
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  // console.log(password);
   try {
     let user = await User.findOne({ email });
     if (!user) {
@@ -16,16 +15,17 @@ const login = async (req, res) => {
       user,
       token: generateToken(user.id),
     });
+    // req.user = id;
+    // next();
   } catch (err) {
     console.error(err.message);
-    console.log(user.matchPassword(password));
     res.status(500).send('Server Error');
   }
 };
 
 const getloggedInUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user._id);
     if (user) {
       res.json(user);
     } else {
@@ -33,6 +33,7 @@ const getloggedInUser = async (req, res) => {
       res.send('User not found');
     }
   } catch (err) {
+    console.log(err);
     res.status(500).send('Server Error');
   }
 };

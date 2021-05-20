@@ -10,14 +10,14 @@ router
   .post(validator.signup, userController.create)
   .get(userController.listUser);
 
-router
-  .route('/follow')
-  .put(auth, userController.addFollower, userController.addFollower);
+router.route('/follow').put(auth, userController.follow);
+
+router.route('/unfollow').put(auth, userController.unfollow);
 
 router
   .route('/:userId')
   .put(auth, validator.signup, userController.updateUser)
-  // .get(userController.userByID)
+  .get(auth, userController.userByID)
   .delete(auth, userController.deleteUser);
 
 // router.route('/post/postId').get(postController.postByID);
