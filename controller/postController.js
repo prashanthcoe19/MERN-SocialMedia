@@ -38,9 +38,9 @@ const listByUser = async (req, res) => {
   }
 };
 
-// @get posts from followed users
-// @get request
-// @api/post/newsfeed
+// @desc get posts from followed users
+// @access private
+// @route api/post/newsfeed
 const newsFeed = async (req, res) => {
   try {
     let posts = await User.findOne({
@@ -58,6 +58,9 @@ const newsFeed = async (req, res) => {
   }
 };
 
+// @desc like a post
+// @access private
+// @route api/post/like
 const like = async (req, res) => {
   try {
     let likes = await Post.findByIdAndUpdate(
@@ -77,6 +80,9 @@ const like = async (req, res) => {
   }
 };
 
+// @desc unlike a post
+// @access private
+// @route api/post/unlike
 const unlike = async (req, res) => {
   try {
     let unlikes = await Post.findByIdAndUpdate(
@@ -96,6 +102,9 @@ const unlike = async (req, res) => {
   }
 };
 
+// @desc comment on a post
+// @access private
+// @route api/post/comment
 const addComment = async (req, res) => {
   try {
     const comment = {
@@ -120,6 +129,9 @@ const addComment = async (req, res) => {
   }
 };
 
+// @desc like a post
+// @access private
+// @route api/post/uncomment
 const deleteComment = async (req, res) => {
   try {
     const comment = {
@@ -144,6 +156,9 @@ const deleteComment = async (req, res) => {
   }
 };
 
+// @desc delete a post
+// @access private
+// @route api/post/:postId
 const deletePost = async (req, res) => {
   try {
     let post = Post.findOne({ _id: req.params.postId }).populate(
@@ -160,6 +175,9 @@ const deletePost = async (req, res) => {
   }
 };
 
+// @desc get a particular post by post ID
+// @access private
+// @route api/post/:postId
 const getPostById = async (req, res) => {
   try {
     let post = await Post.findOne({ _id: req.params.postId }).populate(

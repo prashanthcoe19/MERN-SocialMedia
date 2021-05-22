@@ -40,7 +40,7 @@ const Register = ({ register, isAuthenticated }) => {
               <div class='row justify-content-center my-auto'>
                 <div class='col-md-8 col-10 my-5'>
                   <h3 class='mb-5 text-center heading'>
-                    We are social media app
+                    <span class='fa fa-user-circle' />
                   </h3>
                   <h6 class='msg-info'>Please login to your account</h6>
                   <div className='form'>
@@ -91,9 +91,8 @@ const Register = ({ register, isAuthenticated }) => {
                         value={password}
                       />{' '}
                     </div>
-                    <Link to='/login'>
+                    <Link to='/dashboard' style={{ textDecoration: 'none' }}>
                       <div class='row justify-content-center my-3 px-3'>
-                        {' '}
                         <button class='btn-block btn-color' onClick={onSubmit}>
                           Register
                         </button>{' '}
@@ -119,7 +118,7 @@ const Register = ({ register, isAuthenticated }) => {
 };
 
 Register.propTypes = {
-  // setAlert: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };

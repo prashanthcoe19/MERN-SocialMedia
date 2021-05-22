@@ -57,34 +57,30 @@ export const register =
     }
   };
 
-export const login = (email, password) => async (dispatch) => {
-  const body = JSON.stringify({ email, password });
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  try {
-    const res = await axios.post('/api/auth', body, config);
-    // const { token } = await res.data;
-    // localStorage.setItem('jwtToken', token);
-    // setAuthToken(token);
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data,
-    });
-    dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+export const login =
+  ({ email, password }) =>
+  async (dispatch) => {
+    const body = JSON.stringify({ email, password });
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const res = await axios.post('/api/auth', body, config);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+      dispatch(loadUser());
+    } catch (err) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      }
+      dispatch({
+        type: LOGIN_FAIL,
+      });
     }
-
-    dispatch({
-      type: LOGIN_FAIL,
-    });
-  }
-};
-
+  };
 export const logout = () => ({ type: LOG_OUT });

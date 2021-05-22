@@ -1,8 +1,8 @@
 body {
-  color: #000;
+  color: #f0f2f5;
   overflow-x: hidden;
   height: 100%;
-  background-color: #f0f2f5;
+  background-color: #424242;
   background-repeat: no-repeat;
 }
 
@@ -40,13 +40,13 @@ button:focus {
 .card {
   border-radius: 0;
   border: none;
-  background-color: #f0f2f5;
+  background-color: #3a3a3aa2;
 }
 
 .card1 {
   width: 50%;
   padding: 40px 30px 10px 30px;
-  background-image: linear-gradient(to right, #085e72, #c0c0c0);
+  background-image: #3a3a3aa2;
 }
 
 #logo {
@@ -55,7 +55,12 @@ button:focus {
 }
 
 .heading {
-  margin-bottom: 60px !important;
+  /* margin-bottom: 60px !important; */
+  color: #e6e6e6;
+  font-size: 80px;
+  font-weight: 800;
+  letter-spacing: -10px;
+  margin-bottom: 0;
 }
 
 ::placeholder {
@@ -83,8 +88,9 @@ button:focus {
 
 .btn-color {
   border-radius: 50px;
-  color: #fff;
-  background-image: linear-gradient(to right, #c0c0c0, #085e72);
+  background-color: rgba(255, 235, 59, 0.24);
+  border-color: rgba(255, 235, 59, 0.24);
+  color: #e6e6e6;
   padding: 15px;
   cursor: pointer;
   border: none !important;
@@ -92,14 +98,16 @@ button:focus {
 }
 
 .btn-color:hover {
-  color: #fff;
-  background-image: linear-gradient(to right, #085e72, #c0c0c0);
+  background-color: rgba(255, 235, 59, 0.473);
+  border-color: rgba(255, 235, 59, 0.473);
+  color: #e6e6e6;
 }
 
 .btn-white {
   border-radius: 50px;
-  color: #141313;
-  background-color: #fff;
+  background-color: rgba(255, 235, 59, 0.24);
+  border-color: rgba(255, 235, 59, 0.24);
+  color: #e6e6e6;
   padding: 8px 40px;
   cursor: pointer;
   text-decoration: none !important;
@@ -107,8 +115,9 @@ button:focus {
 }
 
 .btn-white:hover {
-  color: #fff;
-  background-image: linear-gradient(to right, #085e72, #c0c0c0);
+  background-color: rgba(255, 235, 59, 0.473);
+  border-color: rgba(255, 235, 59, 0.473);
+  color: #e6e6e6;
 }
 
 a {

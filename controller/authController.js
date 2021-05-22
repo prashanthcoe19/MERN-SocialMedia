@@ -13,7 +13,7 @@ const login = async (req, res) => {
     }
     res.json({
       user,
-      token: generateToken(user.id),
+      token: generateToken(user._id),
     });
     // req.user = id;
     // next();
@@ -25,7 +25,7 @@ const login = async (req, res) => {
 
 const getloggedInUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     if (user) {
       res.json(user);
     } else {

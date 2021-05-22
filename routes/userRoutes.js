@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import validator from '../validator/validator.js';
 import userController from '../controller/userController.js';
-import postController from '../controller/postController.js';
+import authController from '../controller/authController.js';
 import auth from '../middleware/auth.js';
 
 router

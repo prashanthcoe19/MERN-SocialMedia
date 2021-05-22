@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-
+import generateToken from '../utils/generateToken.js';
 const create = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -15,10 +15,10 @@ const create = async (req, res) => {
     await user.save();
     res.json({
       user,
-      token: generateToken(user.id),
+      token: generateToken(user._id),
     });
-    req.user = id;
-    next();
+    // req.user = id;
+    // next();
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
