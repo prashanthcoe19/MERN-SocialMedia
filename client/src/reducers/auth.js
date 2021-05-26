@@ -6,6 +6,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOG_OUT,
+  BIO_UPDATED,
 } from '../actions/types';
 
 const initialState = {
@@ -29,6 +30,13 @@ function authReducer(state = initialState, action) {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case BIO_UPDATED:
       return {
         ...state,
         ...payload,

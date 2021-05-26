@@ -36,18 +36,19 @@ const listUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, bio } = req.body;
   try {
     const user = await User.findById(req.user.id);
     if (user) {
       user.name = name || user.name;
       user.email = email || user.email;
+      user.bio = bio || user.bio;
       if (password) {
         user.password = password;
       }
       user.updated = Date.now();
       const modified = await user.save();
-      res.json(modified.user);
+      res.json(modified);
     }
   } catch (err) {
     console.lerror(err.message);
@@ -55,9 +56,24 @@ const updateUser = async (req, res) => {
   }
 };
 
-const updatePicture = (req, res) => {
+// const bio = async (req, res) => {
+//   try {
+//     const { bio } = req.body;
+//     console.log(bio);
+//     let user = await User.findById(req.user.id);
+//     if (user) {
+//       user.bio = bio || user.bio;
+//     }
+//     user.updated = Date.now();
+//     const modified = await user.save();
+//     res.json(modified.user);
+//   } catch (err) {
+//     res.status(400).send('Server Error');
+//   }
+// };
+const updatePicture = async (req, res) => {
   try {
-    let picture = User.findByIdAndUpdate(
+    let picture = await User.findByIdAndUpdate(
       req.user._id,
       {
         $in: req.body.pic,

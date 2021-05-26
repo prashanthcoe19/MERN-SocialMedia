@@ -30,6 +30,20 @@ textarea:focus {
   font-weight: 400;
 }
 
+.edit-button {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 8px;
+  background-color: #555555;
+  color: #ffff;
+  transition-duration: 0.4s;
+  margin: 0px;
+  display: block;
+}
+
+.edit-button:hover {
+  background-color: #424242;
+}
+
 button:focus {
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
@@ -54,12 +68,10 @@ button:focus {
   height: 60px;
 }
 
-.heading {
+.post {
   /* margin-bottom: 60px !important; */
   color: #e6e6e6;
-  font-size: 80px;
-  font-weight: 800;
-  letter-spacing: -10px;
+
   margin-bottom: 0;
 }
 
@@ -81,10 +93,10 @@ button:focus {
   margin-left: 15px;
 }
 
-.msg-info {
-  padding-left: 15px;
-  margin-bottom: 30px;
-  text-align: center;
+.user-name {
+  /* padding-left: 15px; */
+  /* margin-bottom: 30px; */
+  margin-top: 0.5em;
 }
 
 .btn-color {
@@ -157,6 +169,8 @@ a:hover {
 @media screen and (max-width: 768px) {
   .container {
     padding: 10px !important;
+    display: flex;
+    flex-direction: column;
   }
 
   .card2 {

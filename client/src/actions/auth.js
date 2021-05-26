@@ -7,6 +7,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOG_OUT,
+  BIO_UPDATED,
   // GET_PROFILE,
 } from './types';
 import { setAlert } from './alert';
@@ -83,4 +84,29 @@ export const login =
       });
     }
   };
+
+export const updateBio = (bio) => async (dispatch) => {
+  const body = JSON.stringify({ bio });
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const res = await axios.put('/api/users', body, config);
+    dispatch({
+      type: BIO_UPDATED,
+      payload: res.data,
+    });
+    dispatch({ loadUser });
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({
+      type: LOGIN_FAIL,
+    });
+  }
+};
 export const logout = () => ({ type: LOG_OUT });
