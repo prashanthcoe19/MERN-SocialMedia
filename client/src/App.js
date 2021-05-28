@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 // import Routes from './components/Routes/Routes';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Landing from './components/layout/Landing';
+import Newsfeed from './components/layout/Newsfeed';
 import store from './store';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -26,6 +27,7 @@ const App = () => {
           <Route exact path='/' component={Landing} />
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
+          <Route exact path='/newsfeed' component={Newsfeed} />
           <Route exact path='/dashboard' component={Dashboard} />
           {/* <Route components={Routes} /> */}
         </Switch>

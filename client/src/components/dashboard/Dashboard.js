@@ -5,30 +5,37 @@ import { connect } from 'react-redux';
 // import DashboardActions from './DashboardActions';
 import { loadUser } from '../../actions/auth';
 import Navbar from '../layout/Navbar';
+
+import polly from './polly.jpg';
+import SOAD from './SOAD-Square_hi.jpg';
+import toumas from './toumas.jpg';
 import './dashboard.css';
 
 const Dashboard = ({ loadUser, auth: { user } }) => {
-  // useEffect(() => {
-  //   loadUser();
-  // }, [loadUser]);
-  // console.log(user.name);
   return (
-    // <Fragment>
-    //   <Navbar />
-    //   <h1 className='large text-primary'>Dashboard</h1>
-    //   <p className='lead'>
-    //     <i className='fas fa-user' /> Welcome {user && user.name}
-    //   </p>
-    // </Fragment>
-    // </Fragment>
     <Fragment>
       <div class='container px-4 py-5 mx-auto'>
-        <div class='card card0'>
+        <div class='card cardm'>
           <div class='d-flex row-reverse justify-content-around'>
-            <div class='p-2' style={{ padding: '0px !important' }}>
-              <h3 class='text-left heading'>
-                <span class='fa fa-user-circle' />
-              </h3>
+            <div
+              class='p-2'
+              style={{ padding: '0px !important', width: '250px' }}
+            >
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img
+                    class='rounded-circle'
+                    src={polly}
+                    style={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></img>
+                </div>
+              </div>
+              {/* </div> */}
               {/* when first render user array is empty and prop content does not
               exists so must check content first */}
               <h6 class='text-left user-name'>{user && user.name}</h6>
@@ -57,9 +64,40 @@ const Dashboard = ({ loadUser, auth: { user } }) => {
               </h6>
             </div>
           </div>
-          {/* <div class='p-2'>
-            <button class='edit-button'>Edit Profile</button>
-          </div> */}
+          <div class='d-flex row-reverse justify-content-around'>
+            <div class='row'>
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img class='image image1' src={polly}></img>
+                </div>
+              </div>
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img class='image image1' src={SOAD}></img>
+                </div>
+              </div>
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img class='image image1' src={toumas}></img>
+                </div>
+              </div>
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img class='image image1' src={toumas}></img>
+                </div>
+              </div>
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img class='image image1' src={SOAD}></img>
+                </div>
+              </div>
+              <div class='col-sm-6 col-md-4'>
+                <div class='thumbnail'>
+                  <img class='image image1' src={polly}></img>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </Fragment>
