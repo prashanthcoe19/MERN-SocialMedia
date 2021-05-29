@@ -10,8 +10,12 @@ import polly from './polly.jpg';
 import SOAD from './SOAD-Square_hi.jpg';
 import toumas from './toumas.jpg';
 import './dashboard.css';
+import { Redirect } from 'react-router';
 
-const Dashboard = ({ loadUser, auth: { user } }) => {
+const Dashboard = ({ loadUser, auth: { user, isAuthenticated } }) => {
+  if (isAuthenticated === null) {
+    return <Redirect to='/login' />;
+  }
   return (
     <Fragment>
       <div class='container px-4 py-5 mx-auto'>
