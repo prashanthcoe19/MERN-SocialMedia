@@ -9,6 +9,7 @@ export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const LOG_OUT = 'LOG_OUT';
 export const BIO_UPDATED = 'BIO_UPDATED';
+export const BIO_UPDATED_FAIL = 'BIO_UPDATED_FAIL';
 export const NEW_POST = 'NEW_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const LIKE = 'LIKE';

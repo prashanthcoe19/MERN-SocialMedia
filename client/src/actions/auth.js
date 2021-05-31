@@ -68,6 +68,7 @@ export const login =
       },
     };
     try {
+      console.log(email);
       const res = await axios.post('/api/auth', body, config);
       dispatch({
         type: LOGIN_SUCCESS,
@@ -85,28 +86,32 @@ export const login =
     }
   };
 
-export const updateBio = (bio) => async (dispatch) => {
-  const body = JSON.stringify({ bio });
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  try {
-    const res = await axios.put('/api/users', body, config);
-    dispatch({
-      type: BIO_UPDATED,
-      payload: res.data,
-    });
-    dispatch({ loadUser });
-  } catch (err) {
-    const errors = err.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+export const updateProfile =
+  ({ name, bio }) =>
+  async (dispatch) => {
+    const body = JSON.stringify({ name, bio });
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      console.log({ name, bio });
+      const res = await axios.put('/api/users', body, config);
+      dispatch({
+        type: BIO_UPDATED,
+        payload: res.data,
+      });
+      dispatch(setAlert('Profile Updated', 'success'));
+      dispatch(loadUser());
+    } catch (err) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      }
+      // dispatch({
+      //   type: LOGIN_FAIL,
+      // });
     }
-    dispatch({
-      type: LOGIN_FAIL,
-    });
-  }
-};
+  };
 export const logout = () => ({ type: LOG_OUT });

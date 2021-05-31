@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   LOG_OUT,
   BIO_UPDATED,
+  BIO_UPDATED_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   isAuthenticated: null,
   loading: true,
   user: {},
+  error: {},
 };
 
 function authReducer(state = initialState, action) {
@@ -40,6 +42,13 @@ function authReducer(state = initialState, action) {
       return {
         ...state,
         ...payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case BIO_UPDATED_FAIL:
+      return {
+        ...state,
+        error: { payload },
         isAuthenticated: true,
         loading: false,
       };
