@@ -8,6 +8,7 @@ import {
   LOGIN_FAIL,
   LOG_OUT,
   BIO_UPDATED,
+  BIO_UPDATED_FAIL,
   // GET_PROFILE,
 } from './types';
 import { setAlert } from './alert';
@@ -68,7 +69,7 @@ export const login =
       },
     };
     try {
-      console.log(email);
+      // console.log(email);
       const res = await axios.post('/api/auth', body, config);
       dispatch({
         type: LOGIN_SUCCESS,
@@ -86,18 +87,13 @@ export const login =
     }
   };
 
-export const updateProfile =
-  ({ name, bio }) =>
+export const update =
+  ({ name, bio, photo }) =>
   async (dispatch) => {
-    const body = JSON.stringify({ name, bio });
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+    const body = { name, bio, photo };
     try {
-      console.log({ name, bio });
-      const res = await axios.put('/api/users', body, config);
+      let res = await axios.put('/api/users', body);
+      console.log(res.data);
       dispatch({
         type: BIO_UPDATED,
         payload: res.data,
@@ -109,9 +105,9 @@ export const updateProfile =
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
       }
-      // dispatch({
-      //   type: LOGIN_FAIL,
-      // });
+      dispatch({
+        type: BIO_UPDATED_FAIL,
+      });
     }
   };
 export const logout = () => ({ type: LOG_OUT });

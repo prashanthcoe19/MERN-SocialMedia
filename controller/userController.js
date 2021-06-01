@@ -37,12 +37,14 @@ const listUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { name, email, password, bio } = req.body;
+  const { photo } = req.file;
   try {
     const user = await User.findById(req.user.id);
     if (user) {
       user.name = name || user.name;
       user.email = email || user.email;
       user.bio = bio || user.bio;
+      user.photo = photo || user.photo;
       if (password) {
         user.password = password;
       }

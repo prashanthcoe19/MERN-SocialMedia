@@ -3,41 +3,46 @@ import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
-import { updateProfile } from '../../actions/auth';
-
+import { update } from '../../actions/auth';
+import { loadUser } from '../../actions/auth';
 import polly from './polly.jpg';
 import SOAD from './SOAD-Square_hi.jpg';
 import toumas from './toumas.jpg';
 import './dashboard.css';
 import { Redirect } from 'react-router';
 
-const Dashboard = ({ auth: { user, isAuthenticated } }) => {
-  // useEffect(() => {
-  //   loadUser();
-  // }, []);
+const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
   const [show, setShow] = useState(false);
-  const [formData, setformData] = useState({ name: '', bio: '' });
-  const { name, bio } = formData;
+  const [formData, setformData] = useState({ name: '', bio: '', photo: '' });
+  const { name, bio, photo } = formData;
 
   const onChange = (e) => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handlePhoto = (e) => {
+    setformData({ ...formData, photo: e.target.files[0] });
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    // FormData.append('name', name);
-    // FormData.append('bio', bio);
-    // setShow(false);
-    // console.log({ name, bio });
-    updateProfile({ name, bio });
+    const newFormData = new FormData();
+    newFormData.append('myImage', name);
+    newFormData.append('bio', bio);
+    newFormData.append('photo', photo);
+    // const { name, bio, photo } = newFormData;
+    update({ name, bio, photo });
   };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  // useEffect(() => {
+  //   loadUser();
+  // }, [loadUser]);
+
   if (isAuthenticated === null) {
     return <Redirect to='/login' />;
   }
-
   return (
     <Fragment>
       <div class='container px-4 py-5 mx-auto'>
@@ -51,7 +56,7 @@ const Dashboard = ({ auth: { user, isAuthenticated } }) => {
                 <div class='thumbnail'>
                   <img
                     class='rounded-circle'
-                    src={polly}
+                    src={user && user.image}
                     style={{
                       objectFit: 'cover',
                       width: '100%',
@@ -79,7 +84,7 @@ const Dashboard = ({ auth: { user, isAuthenticated } }) => {
                   <Modal.Title>Edit Profile</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <div className='form'>
+                  <form className='form' encType='multipart/form-data'>
                     <div class='form-group'>
                       {' '}
                       <label class='form-control-label text-muted'>
@@ -110,12 +115,27 @@ const Dashboard = ({ auth: { user, isAuthenticated } }) => {
                         value={bio}
                       />{' '}
                     </div>
+                    <div class='form-group'>
+                      {' '}
+                      <label class='form-control-label text-muted'>
+                        Change Profile Image
+                      </label>{' '}
+                      <input
+                        type='file'
+                        id='name'
+                        name='image'
+                        placeholder='Upload Image'
+                        class='form-control'
+                        onChange={handlePhoto}
+                      />{' '}
+                      <label>Choose file</label>
+                    </div>
                     <div class='row justify-content-center my-3 px-3'>
                       <button class='btn-block btn-color' onClick={onSubmit}>
                         Submit
                       </button>{' '}
                     </div>
-                  </div>
+                  </form>
                 </Modal.Body>
                 {/* <Modal.Footer>
                   <Button variant='secondary' onClick={handleClose}>
@@ -194,6 +214,7 @@ const Dashboard = ({ auth: { user, isAuthenticated } }) => {
 Dashboard.propTypes = {
   // loadUser: PropTypes.func.isRequired,
   // loadUser: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -201,4 +222,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, { update })(Dashboard);

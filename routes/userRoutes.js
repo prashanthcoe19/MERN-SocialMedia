@@ -4,12 +4,13 @@ import validator from '../validator/validator.js';
 import userController from '../controller/userController.js';
 import authController from '../controller/authController.js';
 import auth from '../middleware/auth.js';
+import upload from '../middleware/upload.js';
 
 router
   .route('/')
   .post(validator.signup, userController.create)
   .get(userController.listUser)
-  .put(auth, userController.updateUser);
+  .put(auth, upload, userController.updateUser);
 
 // router.route('/bio').post(auth, userController.bio);
 

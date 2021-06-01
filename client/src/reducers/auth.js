@@ -15,7 +15,6 @@ const initialState = {
   isAuthenticated: null,
   loading: true,
   user: {},
-  error: {},
 };
 
 function authReducer(state = initialState, action) {
@@ -44,6 +43,7 @@ function authReducer(state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
+        // user: payload,
       };
     case BIO_UPDATED_FAIL:
       return {
