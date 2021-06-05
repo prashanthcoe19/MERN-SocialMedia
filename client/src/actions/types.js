@@ -18,3 +18,4 @@ export const COMMENT = 'COMMENT';
 export const UNCOMMENT = 'UNCOMMENT';
 export const NEWS_FEED = 'NEWS_FEED';
 export const GET_POST = 'GET_POST';
+export const POST_ERROR = 'POST_ERROR';

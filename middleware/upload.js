@@ -3,10 +3,10 @@ import path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/');
+    cb(null, './client/public/uploads/');
   },
   filename: function (req, file, cb) {
-    console.log(file);
+    // console.log(file);
     cb(
       null,
       file.fieldname + '-' + Date.now() + path.extname(file.originalname)
@@ -18,7 +18,7 @@ let upload = multer({
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-}).single('myImage');
+}).single('file');
 
 function checkFileType(file, cb) {
   // Allowed ext

@@ -1,6 +1,5 @@
 import Post from '../models/Post.js';
-import fs from 'fs';
-import formidable from 'formidable';
+
 import User from '../models/User.js';
 
 //@desc: create a new post
@@ -8,9 +7,13 @@ import User from '../models/User.js';
 //@route: api/post/new
 const create = async (req, res) => {
   const { text } = req.body;
+  console.log(text);
+  const photo = req.file.filename;
+  console.log(req.file);
   try {
     let post = new Post({
       text,
+      photo: photo,
       postedBy: req.user.id,
     });
     await post.save();
@@ -26,12 +29,13 @@ const create = async (req, res) => {
 // @route: api/post/by/userId
 const listByUser = async (req, res) => {
   try {
-    let posts = await Post.find({ postedBy: req.params.userId })
+    let posts = await Post.find({ postedBy: req.user.id })
       .populate('comments.postedBy', '_id name')
       .populate('postedBy', '_id name')
       .sort('-created')
       .exec();
     res.json(posts);
+    console.log(posts.length);
   } catch (err) {
     console.log(err);
     res.status(500).send('Server Error');

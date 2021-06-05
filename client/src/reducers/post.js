@@ -7,6 +7,7 @@ import {
   UNCOMMENT,
   NEWS_FEED,
   GET_POST,
+  POST_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -19,10 +20,29 @@ const initialState = {
 function postReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case NEW_POST:
+      return {
+        ...state,
+        posts: payload,
+        loading: false,
+      };
     case NEWS_FEED:
       return {
         ...state,
         posts: payload,
+        loading: false,
+      };
+    case GET_POST:
+      return {
+        ...state,
+        posts: payload,
+        loading: false,
+      };
+    case POST_ERROR:
+      return {
+        ...state,
+        posts: [],
+        post: null,
         loading: false,
       };
     default:

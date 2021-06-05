@@ -51,6 +51,7 @@ export const register =
     } catch (err) {
       const errors = err.response.data.errors;
       if (errors) {
+        alert('Error uploading picture');
         errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
       }
       dispatch({
@@ -87,27 +88,29 @@ export const login =
     }
   };
 
-export const update =
-  ({ name, bio, photo }) =>
-  async (dispatch) => {
-    const body = { name, bio, photo };
-    try {
-      let res = await axios.put('/api/users', body);
-      console.log(res.data);
-      dispatch({
-        type: BIO_UPDATED,
-        payload: res.data,
-      });
-      dispatch(setAlert('Profile Updated', 'success'));
-      dispatch(loadUser());
-    } catch (err) {
-      const errors = err.response.data.errors;
-      if (errors) {
-        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-      }
-      dispatch({
-        type: BIO_UPDATED_FAIL,
-      });
+export const update = (data) => async (dispatch) => {
+  // const { name, bio, photo } = newFormData;
+  // const body = { name, bio, newFormData };
+  try {
+    // const config = {
+    //   headers: { 'content-type': 'multipart/form-data' },
+    // };
+    let res = await axios.put('/api/users', data);
+    console.log(res.data);
+    dispatch({
+      type: BIO_UPDATED,
+      payload: res.data,
+    });
+    dispatch(setAlert('Profile Updated', 'success'));
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
-  };
+    dispatch({
+      type: BIO_UPDATED_FAIL,
+    });
+  }
+};
 export const logout = () => ({ type: LOG_OUT });

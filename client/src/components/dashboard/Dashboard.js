@@ -4,42 +4,56 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import { update } from '../../actions/auth';
-import { loadUser } from '../../actions/auth';
+import NewPost from '../layout/NewPost';
 import polly from './polly.jpg';
 import SOAD from './SOAD-Square_hi.jpg';
 import toumas from './toumas.jpg';
 import './dashboard.css';
 import { Redirect } from 'react-router';
+import axios from 'axios';
+import { getPostByUser } from '../../actions/post';
 
-const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
+const Dashboard = ({ update, user, isAuthenticated, posts, getPostByUser }) => {
+  useEffect(() => {
+    getPostByUser();
+  }, [getPostByUser]);
+
   const [show, setShow] = useState(false);
-  const [formData, setformData] = useState({ name: '', bio: '', photo: '' });
-  const { name, bio, photo } = formData;
 
-  const onChange = (e) => {
-    setformData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [name, setName] = useState();
+  const [bio, setBio] = useState();
+  const [photo, setPhoto] = useState(null);
 
+  // const onChange = (e) => {
+  //   setformData({ ...formData, [e.target.name]: e.target.value });
+  // };
   const handlePhoto = (e) => {
-    setformData({ ...formData, photo: e.target.files[0] });
+    // const photo = e.target.files[0];
+    setPhoto(e.target.files[0]);
   };
-
   const onSubmit = async (e) => {
     e.preventDefault();
-    const newFormData = new FormData();
-    newFormData.append('myImage', name);
-    newFormData.append('bio', bio);
-    newFormData.append('photo', photo);
+    const data = new FormData();
+    data.append('name', name);
+    data.append('bio', bio);
+    data.append('file', photo);
+
+    console.log(photo);
     // const { name, bio, photo } = newFormData;
-    update({ name, bio, photo });
+    update(data);
+  };
+  const handleClose = () => {
+    setShow(false);
   };
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+  };
+
   // useEffect(() => {
   //   loadUser();
   // }, [loadUser]);
-
+  // console.log(user);
   if (isAuthenticated === null) {
     return <Redirect to='/login' />;
   }
@@ -56,12 +70,14 @@ const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
                 <div class='thumbnail'>
                   <img
                     class='rounded-circle'
-                    src={user && user.image}
+                    src={`/uploads/${user.photo}`}
                     style={{
-                      objectFit: 'cover',
+                      objectFit: 'scale-down',
                       width: '100%',
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
+                      border: '2px solid transparent',
+                      borderColor: 'silver',
                     }}
                   ></img>
                 </div>
@@ -96,8 +112,11 @@ const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
                         name='name'
                         placeholder='Name'
                         class='form-control'
-                        onChange={onChange}
                         value={name}
+                        onChange={(e) => {
+                          const { value } = e.target;
+                          setName(value);
+                        }}
                       />{' '}
                     </div>
                     <div class='form-group'>
@@ -111,8 +130,11 @@ const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
                         name='bio'
                         placeholder='Bio'
                         class='form-control'
-                        onChange={onChange}
                         value={bio}
+                        onChange={(e) => {
+                          const { value } = e.target;
+                          setBio(value);
+                        }}
                       />{' '}
                     </div>
                     <div class='form-group'>
@@ -122,8 +144,8 @@ const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
                       </label>{' '}
                       <input
                         type='file'
-                        id='name'
-                        name='image'
+                        id='file'
+                        name='file'
                         placeholder='Upload Image'
                         class='form-control'
                         onChange={handlePhoto}
@@ -146,15 +168,11 @@ const Dashboard = ({ update, auth: { user, isAuthenticated } }) => {
                   </Button>
                 </Modal.Footer> */}
               </Modal>
-              <Button variant='edit-button'>
-                New Post <span />{' '}
-                <i class='fa fa-plus-square' aria-hidden='true'></i>
-              </Button>
+              <NewPost />
             </div>
-
             <div class='p-2'>
               <h6 class='text-left user-name'>Posts</h6>
-              <h6 class='text-left user-name'>333</h6>
+              <h6 class='text-left user-name'>{posts && posts.length}</h6>
             </div>
 
             <div class='p-2'>
@@ -215,11 +233,17 @@ Dashboard.propTypes = {
   // loadUser: PropTypes.func.isRequired,
   // loadUser: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
+  getPostByUser: PropTypes.func.isRequired,
+  // newPost: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  user: state.auth.user,
+  isAuthenticated: state.auth.isAuthenticated,
+  posts: state.post.posts,
 });
 
-export default connect(mapStateToProps, { update })(Dashboard);
+export default connect(mapStateToProps, { update, getPostByUser })(Dashboard);

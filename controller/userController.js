@@ -36,24 +36,28 @@ const listUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { name, email, password, bio } = req.body;
-  const { photo } = req.file;
+  const { name, bio } = req.body;
+  // console.log(req.body);
+  const photo = req.file.filename;
+  console.log(req.file);
+  console.log(photo);
   try {
     const user = await User.findById(req.user.id);
     if (user) {
       user.name = name || user.name;
-      user.email = email || user.email;
+      // user.email = email || user.email;
       user.bio = bio || user.bio;
       user.photo = photo || user.photo;
-      if (password) {
-        user.password = password;
-      }
+      // if (password) {
+      //   user.password = password;
+      // }
       user.updated = Date.now();
       const modified = await user.save();
+
       res.json(modified);
     }
   } catch (err) {
-    console.lerror(err.message);
+    console.error(err.message);
     res.status(404).send('User not Found');
   }
 };
@@ -106,7 +110,7 @@ const userByID = async (req, res) => {
     let user = await User.findById(req.params.userId)
       .populate('following', '_id name')
       .populate('followers', '_id name')
-      .populate('post', 'postedBy ')
+      .populate('post', 'postedBy text photo')
       .exec();
     if (!user)
       return res.status('400').json({
