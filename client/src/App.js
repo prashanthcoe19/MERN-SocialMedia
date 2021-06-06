@@ -28,6 +28,7 @@ const App = () => {
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/newsfeed' component={Newsfeed} />
+          {/* <Route exact path={`{/post/${id}`} component={Post} /> */}
           <Route exact path='/dashboard' component={Dashboard} />
           {/* <Route components={Routes} /> */}
         </Switch>

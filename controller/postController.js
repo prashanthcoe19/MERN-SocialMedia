@@ -35,7 +35,7 @@ const listByUser = async (req, res) => {
       .sort('-created')
       .exec();
     res.json(posts);
-    console.log(posts.length);
+    // console.log(posts.length);
   } catch (err) {
     console.log(err);
     res.status(500).send('Server Error');
@@ -47,7 +47,8 @@ const listByUser = async (req, res) => {
 // @route api/post/newsfeed
 const newsFeed = async (req, res) => {
   try {
-    let posts = await User.findOne({
+    // console.log(req.user.following);
+    let posts = await Post.find({
       postedBy: {
         $in: req.user.following,
       },
@@ -133,7 +134,7 @@ const addComment = async (req, res) => {
   }
 };
 
-// @desc like a post
+// @desc delete a comment
 // @access private
 // @route api/post/uncomment
 const deleteComment = async (req, res) => {

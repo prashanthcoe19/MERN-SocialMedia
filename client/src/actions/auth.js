@@ -89,12 +89,7 @@ export const login =
   };
 
 export const update = (data) => async (dispatch) => {
-  // const { name, bio, photo } = newFormData;
-  // const body = { name, bio, newFormData };
   try {
-    // const config = {
-    //   headers: { 'content-type': 'multipart/form-data' },
-    // };
     let res = await axios.put('/api/users', data);
     console.log(res.data);
     dispatch({

@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useEffect, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { newsFeed } from '../../actions/post';
+import Post from './Post';
 
-const Newsfeed = () => {
+const Newsfeed = ({ newsFeed, posts }) => {
+  useEffect(() => {
+    newsFeed();
+  }, [newsFeed]);
+  console.log(posts);
   return (
-    <div>
-      <h1>NewsFeed</h1>
-    </div>
+    <Fragment>
+      {posts.map((post) => {
+        return <Post key={post.id} post={post} />;
+      })}
+    </Fragment>
   );
 };
 
-export default Newsfeed;
+Newsfeed.propTypes = {
+  newsFeed: PropTypes.func.isRequired,
+  posts: PropTypes.array.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  posts: state.post.posts,
+});
+export default connect(mapStateToProps, { newsFeed })(Newsfeed);

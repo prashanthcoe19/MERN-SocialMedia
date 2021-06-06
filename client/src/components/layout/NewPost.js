@@ -3,7 +3,7 @@ import { newPost } from '../../actions/post';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
-const NewPost = ({ newPost, post }) => {
+const NewPost = ({ newPost }) => {
   const [show, setShow] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [text, setText] = useState();
@@ -30,7 +30,8 @@ const NewPost = ({ newPost, post }) => {
   return (
     <Fragment>
       <Button variant='edit-button' onClick={handleShow}>
-        New Post <span /> <i class='fa fa-plus-square' aria-hidden='true'></i>
+        New Post <span />{' '}
+        <i className='fa fa-plus-square' aria-hidden='true'></i>
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -38,9 +39,9 @@ const NewPost = ({ newPost, post }) => {
         </Modal.Header>
         <Modal.Body>
           <form className='form' encType='multipart/form-data'>
-            <div class='form-group'>
+            <div className='form-group'>
               {' '}
-              <label class='form-control-label text-muted'>
+              <label className='form-control-label text-muted'>
                 Description
               </label>{' '}
               <input
@@ -48,7 +49,7 @@ const NewPost = ({ newPost, post }) => {
                 id='text'
                 name='text'
                 placeholder='Description'
-                class='form-control'
+                className='form-control'
                 value={text}
                 onChange={(e) => {
                   const { value } = e.target;
@@ -56,9 +57,9 @@ const NewPost = ({ newPost, post }) => {
                 }}
               />{' '}
             </div>
-            <div class='form-group'>
+            <div className='form-group'>
               {' '}
-              <label class='form-control-label text-muted'>
+              <label className='form-control-label text-muted'>
                 Upload New Photo
               </label>{' '}
               <input
@@ -66,13 +67,13 @@ const NewPost = ({ newPost, post }) => {
                 id='file'
                 name='file'
                 placeholder='Upload Image'
-                class='form-control'
+                className='form-control'
                 onChange={handlePhoto}
               />{' '}
               <label>Choose file</label>
             </div>
-            <div class='row justify-content-center my-3 px-3'>
-              <button class='btn-block btn-color' onClick={postSubmit}>
+            <div className='row justify-content-center my-3 px-3'>
+              <button className='btn-block btn-color' onClick={postSubmit}>
                 Submit
               </button>{' '}
             </div>
@@ -85,8 +86,5 @@ const NewPost = ({ newPost, post }) => {
 NewPost.propTypes = {
   newPost: PropTypes.func.isRequired,
 };
-const mapStateToProps = (state) => ({
-  post: state.post,
-});
 
-export default connect(mapStateToProps, { newPost })(NewPost);
+export default connect(null, { newPost })(NewPost);

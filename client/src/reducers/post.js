@@ -7,6 +7,7 @@ import {
   UNCOMMENT,
   NEWS_FEED,
   GET_POST,
+  GET_POSTS,
   POST_ERROR,
 } from '../actions/types';
 
@@ -23,7 +24,7 @@ function postReducer(state = initialState, action) {
     case NEW_POST:
       return {
         ...state,
-        posts: payload,
+        posts: [payload, ...state.posts],
         loading: false,
       };
     case NEWS_FEED:
@@ -32,10 +33,16 @@ function postReducer(state = initialState, action) {
         posts: payload,
         loading: false,
       };
-    case GET_POST:
+    case GET_POSTS:
       return {
         ...state,
         posts: payload,
+        loading: false,
+      };
+    case GET_POST:
+      return {
+        ...state,
+        post: payload,
         loading: false,
       };
     case POST_ERROR:

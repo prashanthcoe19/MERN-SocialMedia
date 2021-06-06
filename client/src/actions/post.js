@@ -8,6 +8,7 @@ import {
   UNCOMMENT,
   NEWS_FEED,
   GET_POST,
+  GET_POSTS,
   POST_ERROR,
 } from './types';
 import { setAlert } from './alert';
@@ -16,7 +17,8 @@ import { setAlert } from './alert';
 
 export const newsFeed = () => async (dispatch) => {
   try {
-    let res = axios.get('/api/post/newsfeed');
+    let res = await axios.get('/api/post/newsfeed');
+    console.log(res);
     dispatch({
       type: NEWS_FEED,
       payload: res.data,
@@ -32,7 +34,7 @@ export const newsFeed = () => async (dispatch) => {
 export const newPost = (newpost) => async (dispatch) => {
   try {
     console.log(newpost);
-    let res = axios.post('/api/post/new', newpost);
+    let res = await axios.post('/api/post/new', newpost);
     dispatch({
       type: NEW_POST,
       payload: res.data,
@@ -48,7 +50,22 @@ export const newPost = (newpost) => async (dispatch) => {
 export const getPostByUser = () => async (dispatch) => {
   try {
     let res = await axios.get(`/api/post/by`);
-    console.log(res);
+    // console.log(res);
+    dispatch({
+      type: GET_POSTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+export const getPost = (id) => async (dispatch) => {
+  try {
+    let res = await axios.get(`/api/post/${id}`);
     dispatch({
       type: GET_POST,
       payload: res.data,
