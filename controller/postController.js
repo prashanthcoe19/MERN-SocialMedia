@@ -54,7 +54,7 @@ const newsFeed = async (req, res) => {
       },
     })
       .populate('comments.postedBy', '_id name')
-      .populate('postedBy', '_id name')
+      .populate('postedBy', '_id name photo')
       .sort('-created')
       .exec();
     res.json(posts);
