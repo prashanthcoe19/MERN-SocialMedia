@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../dashboard/dashboard.css';
+import '../private/dashboard.css';
 const Post = ({ post: { text, photo, postedBy, likes, comments } }) => {
   console.log(text);
   return (
@@ -20,7 +20,7 @@ const Post = ({ post: { text, photo, postedBy, likes, comments } }) => {
           </div>
         </div>
         <div class='p-2'>
-          <img class='image image1' src={`/uploads/${photo}`} />
+          <img class='image2 image1' src={`/uploads/${photo}`} />
         </div>
         <div class='d-flex row-reverse justify-content-start align-items-center'>
           <div class='p-1'>

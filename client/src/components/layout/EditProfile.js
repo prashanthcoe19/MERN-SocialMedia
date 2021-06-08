@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import { update } from '../../actions/auth';
-import '../dashboard/dashboard.css';
+import '../private/dashboard.css';
 
 const EditProfile = ({ update }) => {
   const [show, setShow] = useState(false);

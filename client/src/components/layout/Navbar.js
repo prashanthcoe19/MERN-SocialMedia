@@ -1,43 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Logout from './Logout';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/auth';
 import { connect } from 'react-redux';
-
+import { Button } from 'react-bootstrap';
 const Navbar = ({ user, logout }) => {
-  //   const onSubmit = (e) => {
-  //     e.preventDefault();
-  //     logout();
-  //   };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    logout();
+  };
   return (
-    <nav class='navbar navbar-expand-lg navbar-light bg-light'>
-      <a class='navbar-brand' href='#'>
-        Social Media App
-      </a>
-      <button
-        class='navbar-toggler'
-        type='button'
-        data-toggle='collapse'
-        data-target='#navbarNav'
-        aria-controls='navbarNav'
-        aria-expanded='false'
-        aria-label='Toggle navigation'
-      >
-        <span class='navbar-toggler-icon'></span>
-      </button>
-      <div class='collapse navbar-collapse' id='navbarNav'>
-        <ul class='navbar-nav'>
-          {/* <li class='nav-item'>Welcome {user.name}</li> */}
-          <li class='nav-item'>
-            <Link to='/login'>
-              <a class='nav-link' href='#' onClick={logout}>
-                Logout
+    <div class='container px-4 py-5 mx-auto'>
+      <div class='card cardm'>
+        <nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top'>
+          <div class='p-2'>
+            <Link to='/newsfeed' style={{ textDecoration: 'none' }}>
+              <a class='navbar-brand' href='#'>
+                Social Media App
               </a>
             </Link>
-          </li>
-        </ul>
+          </div>
+
+          <ul class='navbar-nav'>
+            <li class='nav-item' style={{ marginRight: '10px' }}>
+              <Link to='/dashboard'>
+                <Button variant='edit-button'>
+                  <i class='fas fa-user' style={{ textDecoration: 'none' }}>
+                    {' '}
+                    <span />
+                    Profile
+                  </i>
+                </Button>
+              </Link>
+            </li>{' '}
+            <span />
+            <li class='nav-item' style={{ marginRight: '10px' }}>
+              <Logout />
+            </li>
+          </ul>
+        </nav>
       </div>
-    </nav>
+    </div>
   );
 };
 

@@ -8,7 +8,6 @@ import './dashboard.css';
 import { Redirect } from 'react-router';
 import { getPostByUser } from '../../actions/post';
 import Posts from '../layout/Posts';
-import Logout from '../layout/Logout';
 
 const Dashboard = ({ user, isAuthenticated, posts, getPostByUser }) => {
   useEffect(() => {
@@ -35,7 +34,8 @@ const Dashboard = ({ user, isAuthenticated, posts, getPostByUser }) => {
                     src={`/uploads/${user.photo}`}
                     style={{
                       objectFit: 'scale-down',
-                      width: '100%',
+                      width: '50px',
+                      height: '60px',
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       border: '2px solid transparent',
@@ -50,7 +50,6 @@ const Dashboard = ({ user, isAuthenticated, posts, getPostByUser }) => {
               <p>{user && user.bio}</p>
               <EditProfile />
               <NewPost />
-              <Logout />
             </div>
             <div class='p-2'>
               <h6 class='text-left user-name'>Posts</h6>
