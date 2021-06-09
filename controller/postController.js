@@ -24,12 +24,30 @@ const create = async (req, res) => {
   }
 };
 
-// @desc: post list of certain user
+// @desc: post list of logged in user
 // @access:  private
-// @route: api/post/by/userId
+// @route: api/post/by/
 const listByUser = async (req, res) => {
   try {
     let posts = await Post.find({ postedBy: req.user.id })
+      .populate('comments.postedBy', '_id name')
+      .populate('postedBy', '_id name')
+      .sort('-created')
+      .exec();
+    res.json(posts);
+    // console.log(posts.length);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+// @desc: post list by userId
+// @access:  private
+// @route: api/post/userId
+const postByUserId = async (req, res) => {
+  try {
+    let posts = await Post.find({ postedBy: req.params.userId })
       .populate('comments.postedBy', '_id name')
       .populate('postedBy', '_id name')
       .sort('-created')
@@ -212,4 +230,5 @@ export default {
   unlike,
   deleteComment,
   addComment,
+  postByUserId,
 };

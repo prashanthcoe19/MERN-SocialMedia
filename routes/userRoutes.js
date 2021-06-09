@@ -20,7 +20,7 @@ router.route('/unfollow').put(auth, userController.unfollow);
 
 router
   .route('/:userId')
-  .get(auth, userController.userByID)
+  .get(userController.userByID)
   .delete(auth, userController.deleteUser);
 
 // router.route('/post/postId').get(postController.postByID);

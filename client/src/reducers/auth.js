@@ -8,6 +8,8 @@ import {
   LOG_OUT,
   BIO_UPDATED,
   BIO_UPDATED_FAIL,
+  GET_PROFILE,
+  PROFILE_ERROR,
 } from '../actions/types';
 
 const initialState = {

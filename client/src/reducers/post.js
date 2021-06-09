@@ -9,6 +9,7 @@ import {
   GET_POST,
   GET_POSTS,
   POST_ERROR,
+  GET_USER_POSTS,
 } from '../actions/types';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   post: null,
   loading: true,
   error: {},
+  // userposts: [],
 };
 
 function postReducer(state = initialState, action) {
@@ -45,6 +47,12 @@ function postReducer(state = initialState, action) {
         post: payload,
         loading: false,
       };
+    // case GET_USER_POSTS:
+    //   return {
+    //     ...state,
+    //     userposts: payload,
+    //     loading: false,
+    //   };
     case POST_ERROR:
       return {
         ...state,

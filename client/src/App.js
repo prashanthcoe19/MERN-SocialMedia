@@ -3,23 +3,30 @@ import { Provider } from 'react-redux';
 // import Routes from './components/Routes/Routes';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Landing from './components/layout/Landing';
-import Newsfeed from './components/layout/Newsfeed';
+// import Newsfeed from './components/layout/Newsfeed';
 import store from './store';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
+// import Login from './components/auth/Login';
+// import Register from './components/auth/Register';
 // import PrivateRoute from './components/Routes/PrivateRoute';
-import Dashboard from './components/private/Dashboard';
+// import Dashboard from './components/private/Dashboard';
 import setAuthToken from './utilities/setAuthToken';
 import { loadUser } from './actions/auth';
 import Navbar from './components/layout/Navbar';
-
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
+import Routes from './components/Routes/Routes';
+import { LOG_OUT } from './actions/types';
 
 const App = () => {
   useEffect(() => {
+    // check for token in LS
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
     store.dispatch(loadUser());
+
+    // log user out from all tabs if they log out in one tab
+    window.addEventListener('storage', () => {
+      if (!localStorage.token) store.dispatch({ type: LOG_OUT });
+    });
   }, []);
   return (
     <Provider store={store}>
@@ -27,12 +34,7 @@ const App = () => {
         <Navbar />
         <Switch>
           <Route exact path='/' component={Landing} />
-          <Route exact path='/register' component={Register} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/newsfeed' component={Newsfeed} />
-          {/* <Route exact path={`{/post/${id}`} component={Post} /> */}
-          <Route exact path='/dashboard' component={Dashboard} />
-          {/* <Route components={Routes} /> */}
+          <Route component={Routes} />
         </Switch>
       </BrowserRouter>
     </Provider>

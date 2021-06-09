@@ -106,6 +106,7 @@ const deleteUser = async (req, res) => {
 };
 
 const userByID = async (req, res) => {
+  // console.log(req.params.userId);
   try {
     let user = await User.findById(req.params.userId)
       .populate('following', '_id name')
@@ -117,6 +118,7 @@ const userByID = async (req, res) => {
         error: 'User not found',
       });
     res.json(user);
+    // console.log(user);
   } catch (err) {
     return res.status('400').json({
       error: 'Could not retrieve user',

@@ -21,6 +21,8 @@ router.route('/uncomment').put(auth, postController.deleteComment);
 
 router.route('/by').get(auth, postController.listByUser);
 
+router.route('/postBy/:userId').get(postController.postByUserId);
+
 router
   .route('/:postId')
   .get(auth, postController.getPostById)

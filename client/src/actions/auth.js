@@ -9,7 +9,8 @@ import {
   LOG_OUT,
   BIO_UPDATED,
   BIO_UPDATED_FAIL,
-  // GET_PROFILE,
+  GET_PROFILE,
+  PROFILE_ERROR,
 } from './types';
 import { setAlert } from './alert';
 import setAuthToken from '../utilities/setAuthToken';
@@ -108,4 +109,23 @@ export const update = (data) => async (dispatch) => {
     });
   }
 };
+
+export const getProfileById = (id) => async (dispatch) => {
+  try {
+    let res = await axios.get(`/api/users/${id}`);
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({
+      type: PROFILE_ERROR,
+    });
+  }
+};
+
 export const logout = () => ({ type: LOG_OUT });
