@@ -6,7 +6,9 @@ import '../private/dashboard.css';
 import { Button } from 'react-bootstrap';
 import { getProfileById } from '../../actions/auth';
 import Posts from './Posts';
+import Follow from '../layout/Follow';
 import { getPostByUserId } from '../../actions/post';
+import Spinner from '../layout/Spinner';
 
 const UserProfile = ({
   profil,
@@ -15,13 +17,24 @@ const UserProfile = ({
   getProfileById,
   getPostByUserId,
   user,
+  loading,
 }) => {
   useEffect(() => {
     getPostByUserId(match.params.id);
     getProfileById(match.params.id);
   }, [getProfileById, getPostByUserId, match.params.id]);
-  const { followId } = match.params.id;
-  console.log(followId);
+
+  // const follow = (
+  //   <Fragment>
+  //     <Button variant='edit-button'>Follow</Button>
+  //   </Fragment>
+  // );
+  // const unfollow = (
+  //   <Fragment>
+  //     <Button variant='edit-button'>Unfollow</Button>
+  //   </Fragment>
+  // );
+  // if (loading) return <Spinner />;
   return (
     <Fragment>
       <div class='container px-4 py-5 mx-auto'>
@@ -51,6 +64,22 @@ const UserProfile = ({
 
               <h6 class='text-left user-name'>{profil && profil.name}</h6>
               <p>{profil && profil.bio}</p>
+              <p>
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  user.following.map((item, i) => {
+                    return (
+                      //
+                      item == match.params.id ? (
+                        <Button variant='edit-button'>unfollow</Button>
+                      ) : (
+                        <Button variant='edit-button'>Follow</Button>
+                      )
+                    );
+                  })
+                )}
+              </p>
             </div>
             <div class='p-2'>
               <h6 class='text-left user-name'>Posts</h6>
@@ -82,12 +111,14 @@ UserProfile.propTypes = {
   profil: PropTypes.object.isRequired,
   posts: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   profil: state.profile.profil,
   posts: state.post.posts,
   user: state.auth.user,
+  loading: state.auth.loading,
 });
 
 export default connect(mapStateToProps, { getProfileById, getPostByUserId })(

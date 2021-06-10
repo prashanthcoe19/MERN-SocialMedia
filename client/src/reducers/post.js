@@ -17,7 +17,6 @@ const initialState = {
   post: null,
   loading: true,
   error: {},
-  // userposts: [],
 };
 
 function postReducer(state = initialState, action) {
