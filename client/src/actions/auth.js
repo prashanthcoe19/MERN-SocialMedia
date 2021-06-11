@@ -11,6 +11,9 @@ import {
   BIO_UPDATED_FAIL,
   GET_PROFILE,
   PROFILE_ERROR,
+  FOLLOW,
+  UNFOLLOW,
+  FOLLOW_ERROR,
 } from './types';
 import { setAlert } from './alert';
 import setAuthToken from '../utilities/setAuthToken';
@@ -128,4 +131,58 @@ export const getProfileById = (id) => async (dispatch) => {
   }
 };
 
+export const follow = (followId) => async (dispatch) => {
+  console.log(followId);
+  let body = JSON.stringify({ followId });
+  console.log(body);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    let res = await axios.put(`/api/users/follow`, body, config);
+    console.log(res.data);
+    dispatch({
+      type: FOLLOW,
+      payload: res.data,
+    });
+    // dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({
+      type: FOLLOW_ERROR,
+    });
+  }
+};
+
+export const unfollow = (unfollowId) => async (dispatch) => {
+  console.log(unfollowId);
+  let body = JSON.stringify({ unfollowId });
+  console.log(body);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    let res = await axios.put('/api/users/unfollow', body, config);
+    console.log(res.data);
+    dispatch({
+      type: UNFOLLOW,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({
+      type: FOLLOW_ERROR,
+    });
+  }
+};
 export const logout = () => ({ type: LOG_OUT });

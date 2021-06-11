@@ -228,3 +228,22 @@ a:hover {
     margin-bottom: 50px !important;
   }
 }
+@media screen and (max-width: 425px) {
+  .container {
+    padding: 40px !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .cardm {
+    width: 400px;
+    margin-left: -50px;
+  }
+  .card2 {
+    padding: 50px;
+  }
+
+  .right {
+    margin-top: 50px !important;
+    margin-bottom: 50px !important;
+  }
+}

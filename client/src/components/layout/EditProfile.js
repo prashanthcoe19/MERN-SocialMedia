@@ -59,8 +59,8 @@ const EditProfile = ({ update }) => {
                 name='name'
                 placeholder='Name'
                 class='form-control'
-                value={name}
-                onChange={(e) => {
+                defaultValue={name}
+                onBlur={(e) => {
                   const { value } = e.target;
                   setName(value);
                 }}

@@ -1,4 +1,10 @@
-import { GET_PROFILE, PROFILE_ERROR } from '../actions/types';
+import {
+  GET_PROFILE,
+  PROFILE_ERROR,
+  FOLLOW,
+  FOLLOW_ERROR,
+  UNFOLLOW,
+} from '../actions/types';
 const initialState = {
   profil: {},
   loading: true,
@@ -12,6 +18,19 @@ function profileReducer(state = initialState, action) {
       return {
         ...state,
         profil: payload,
+        loading: false,
+      };
+    case FOLLOW:
+    case UNFOLLOW:
+      return {
+        ...state,
+        profil: payload.result1,
+        loading: false,
+      };
+    case FOLLOW_ERROR:
+      return {
+        ...state,
+        ...payload,
         loading: false,
       };
     case PROFILE_ERROR:

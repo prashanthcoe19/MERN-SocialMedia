@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import '../private/dashboard.css';
 import { Button } from 'react-bootstrap';
-import { getProfileById } from '../../actions/auth';
+import { getProfileById, unfollow, follow } from '../../actions/auth';
 import Posts from './Posts';
-import Follow from '../layout/Follow';
 import { getPostByUserId } from '../../actions/post';
 import Spinner from '../layout/Spinner';
 
@@ -18,23 +17,26 @@ const UserProfile = ({
   getPostByUserId,
   user,
   loading,
+  follow,
+  unfollow,
 }) => {
   useEffect(() => {
     getPostByUserId(match.params.id);
     getProfileById(match.params.id);
   }, [getProfileById, getPostByUserId, match.params.id]);
+  const id = match.params.id;
+  const followUser = () => {
+    follow(id);
+  };
+  const unfollowUser = () => {
+    unfollow(id);
+  };
 
-  // const follow = (
-  //   <Fragment>
-  //     <Button variant='edit-button'>Follow</Button>
-  //   </Fragment>
-  // );
-  // const unfollow = (
-  //   <Fragment>
-  //     <Button variant='edit-button'>Unfollow</Button>
-  //   </Fragment>
-  // );
   // if (loading) return <Spinner />;
+
+  if (user._id == match.params.id) {
+    return <Redirect to='/dashboard' />;
+  }
   return (
     <Fragment>
       <div class='container px-4 py-5 mx-auto'>
@@ -61,23 +63,23 @@ const UserProfile = ({
                   ></img>
                 </div>
               </div>
-
               <h6 class='text-left user-name'>{profil && profil.name}</h6>
               <p>{profil && profil.bio}</p>
               <p>
                 {loading ? (
                   <Spinner />
+                ) : user.following.length == 0 ? (
+                  <Button variant='edit-button' onClick={followUser}>
+                    Follow
+                  </Button>
+                ) : user.following.includes(match.params.id) ? (
+                  <Button variant='edit-button' onClick={unfollowUser}>
+                    Unfollow
+                  </Button>
                 ) : (
-                  user.following.map((item, i) => {
-                    return (
-                      //
-                      item == match.params.id ? (
-                        <Button variant='edit-button'>unfollow</Button>
-                      ) : (
-                        <Button variant='edit-button'>Follow</Button>
-                      )
-                    );
-                  })
+                  <Button variant='edit-button' onClick={followUser}>
+                    Follow
+                  </Button>
                 )}
               </p>
             </div>
@@ -108,6 +110,8 @@ const UserProfile = ({
 UserProfile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   getPostByUserId: PropTypes.func.isRequired,
+  follow: PropTypes.func.isRequired,
+  unfollow: PropTypes.func.isRequired,
   profil: PropTypes.object.isRequired,
   posts: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
@@ -121,6 +125,9 @@ const mapStateToProps = (state) => ({
   loading: state.auth.loading,
 });
 
-export default connect(mapStateToProps, { getProfileById, getPostByUserId })(
-  UserProfile
-);
+export default connect(mapStateToProps, {
+  getProfileById,
+  getPostByUserId,
+  follow,
+  unfollow,
+})(UserProfile);

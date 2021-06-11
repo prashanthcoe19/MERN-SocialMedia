@@ -37,23 +37,15 @@ const listUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { name, bio } = req.body;
-  // console.log(req.body);
   const photo = req.file.filename;
-  console.log(req.file);
-  console.log(photo);
   try {
     const user = await User.findById(req.user.id);
     if (user) {
       user.name = name || user.name;
-      // user.email = email || user.email;
       user.bio = bio || user.bio;
       user.photo = photo || user.photo;
-      // if (password) {
-      //   user.password = password;
-      // }
       user.updated = Date.now();
       const modified = await user.save();
-
       res.json(modified);
     }
   } catch (err) {
@@ -127,72 +119,78 @@ const userByID = async (req, res) => {
 };
 
 const follow = async (req, res) => {
+  if (req.user._id === req.body.followId) {
+    return res.status(400).json({ error: 'You cannot follow yourself' });
+  }
+  let result1;
+  let result2;
   try {
-    if (req.body.userId === req.body.followId) {
-      return res.status(400).json({ error: 'You cannot follow yourself' });
-    }
-    let result = await User.findByIdAndUpdate(
+    result1 = await User.findByIdAndUpdate(
       req.body.followId,
-      { $push: { followers: req.body.userId } },
+      {
+        $push: { followers: req.user._id },
+      },
       { new: true }
     )
-      .populate('following', '_id name')
-      .populate('followers', '_id name')
+      .select('-password')
       .exec();
-    await User.findByIdAndUpdate(
-      req.body.userId,
+  } catch (err) {
+    console.log(err);
+    res.status(404).send('Error');
+  }
+  try {
+    result2 = await User.findByIdAndUpdate(
+      req.user._id,
       {
         $push: { following: req.body.followId },
       },
-      {
-        new: true,
-      }
+      { new: true }
     )
-      .populate('following', '_id name')
-      .populate('followers', '_id name')
+      .select('-password')
       .exec();
-    res.json(result);
   } catch (err) {
     console.log(err);
     res.status(404).send('Error');
   }
+  res.json({ result1, result2 });
 };
 
 const unfollow = async (req, res) => {
+  if (req.user._id === req.body.unfollowId) {
+    return res.status(400).json({ error: 'You cannot follow yourself' });
+  }
+  let result1;
+  let result2;
+  console.log(req.body.unfollowId);
   try {
-    if (req.body.userId === req.body.followId) {
-      return res.status(400).json({ error: 'You cannot follow yourself' });
-    }
-    let result = await User.findByIdAndUpdate(
+    result1 = await User.findByIdAndUpdate(
       req.body.unfollowId,
       {
-        $pull: { followers: req.body.userId },
+        $pull: { followers: req.user._id },
       },
-      {
-        new: true,
-      }
-    )
-      .populate('following', '_id name')
-      .populate('followers', '_id name')
-      .exec();
-    await User.findByIdAndUpdate(
-      req.body.userId,
-      {
-        $pull: { following: req.body.unfollowId },
-      },
-      {
-        new: true,
-      }
+      { new: true }
     )
       .select('-password')
-      .populate('following', '_id name')
-      .populate('followers', '_id name')
       .exec();
-    res.json(result);
   } catch (err) {
     console.log(err);
     res.status(404).send('Error');
   }
+  try {
+    result2 = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { following: req.body.unfollowId },
+      },
+      { new: true }
+    )
+      .select('-password')
+      .exec();
+  } catch (err) {
+    console.log(err);
+    res.status(404).send('Error');
+  }
+  res.json({ result1, result2 });
 };
 
 export default {

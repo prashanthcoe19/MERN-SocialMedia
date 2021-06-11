@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../private/dashboard.css';
 const Post = ({ post: { text, photo, postedBy, likes, comments } }) => {
-  console.log(text);
   return (
     <div class='container px-4 py-5 mx-auto'>
       <div class='card cardm'>

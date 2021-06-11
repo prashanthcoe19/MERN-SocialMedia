@@ -10,6 +10,9 @@ import {
   BIO_UPDATED_FAIL,
   GET_PROFILE,
   PROFILE_ERROR,
+  FOLLOW,
+  UNFOLLOW,
+  FOLLOW_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -52,6 +55,20 @@ function authReducer(state = initialState, action) {
         ...state,
         error: { payload },
         isAuthenticated: true,
+        loading: false,
+      };
+    case FOLLOW:
+    case UNFOLLOW:
+      return {
+        ...state,
+        user: payload.result2,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case FOLLOW_ERROR:
+      return {
+        ...state,
+        ...payload,
         loading: false,
       };
     case LOGIN_FAIL:
