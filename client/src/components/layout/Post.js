@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../private/dashboard.css';
-const Post = ({ post: { text, photo, postedBy, likes, comments } }) => {
+import { comment } from '../../actions/post';
+import { connect } from 'react-redux';
+const Post = ({
+  post: { text, photo, postedBy, likes, comments, _id },
+  comment,
+}) => {
+  const [com, setCom] = useState();
+  const handleChange = (e) => {
+    setCom(e.target.value);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    comment(com, _id);
+    setCom('');
+  };
   return (
     <div class='container px-4 py-5 mx-auto'>
       <div class='card cardm'>
@@ -43,12 +57,28 @@ const Post = ({ post: { text, photo, postedBy, likes, comments } }) => {
           </div>
         </div>{' '}
         <div class='p-2'>
-          <p>View all {comments && comments.length} comments</p>
+          {/* <p>View all {comments && comments.length} comments</p> */}
           {comments.map((comment) => {
-            <p>
-              {comments.postedBy} <span /> {comment}
-            </p>;
+            return (
+              <p>
+                <strong>{comment.postedBy.name}</strong> <span /> {comment.text}
+              </p>
+            );
           })}
+        </div>
+        <div class='p-2'>
+          <form className='form' onSubmit={handleSubmit}>
+            <div class='form-group'>
+              <input
+                type='text'
+                id='com'
+                name='com'
+                value={com}
+                placeholder='Comment'
+                onChange={handleChange}
+              />
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -57,6 +87,7 @@ const Post = ({ post: { text, photo, postedBy, likes, comments } }) => {
 
 Post.propTypes = {
   post: PropTypes.object.isRequired,
+  comment: PropTypes.func.isRequired,
 };
 
-export default Post;
+export default connect(null, { comment })(Post);

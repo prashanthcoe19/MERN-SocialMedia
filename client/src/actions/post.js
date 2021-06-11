@@ -106,3 +106,41 @@ export const getPost = (id) => async (dispatch) => {
     });
   }
 };
+
+export const comment = (text, postId) => async (dispatch) => {
+  let body = JSON.stringify({ text, postId });
+  console.log(text, postId);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    let res = await axios.put(`/api/post/comment`, body, config);
+    console.log(res.data);
+    dispatch({
+      type: COMMENT,
+      payload: res.data,
+    });
+    dispatch(newsFeed());
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+export const uncomment = () => async (dispatch) => {
+  try {
+    let res = await axios.put(`/api/post/comment`);
+    dispatch({
+      type: GET_POST,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};

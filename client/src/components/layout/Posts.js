@@ -13,8 +13,8 @@ const Posts = ({ getPostByUser, posts }) => {
         <div class='row'>
           {posts.map((post) => {
             return (
-              <div class='col-sm-6 col-md-4'>
-                <div class='thumbnail'>
+              <div class='col-sm-6 col-md-4' key={post._id}>
+                <div class='thumbnail' key={post._id}>
                   <img
                     class='image image1'
                     src={`/uploads/${post.photo}`}
@@ -31,7 +31,7 @@ const Posts = ({ getPostByUser, posts }) => {
 
 Posts.propTypes = {
   getPostByUser: PropTypes.func.isRequired,
-  posts: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({

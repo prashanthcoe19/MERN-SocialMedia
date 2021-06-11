@@ -43,7 +43,20 @@ function postReducer(state = initialState, action) {
     case GET_POST:
       return {
         ...state,
+        ...state.posts,
         post: payload,
+        loading: false,
+      };
+    case COMMENT:
+      return {
+        ...state,
+        post: { ...state.post, comments: payload.comments },
+        loading: false,
+      };
+    case UNCOMMENT:
+      return {
+        ...state,
+        post: { ...state.post },
         loading: false,
       };
     // case GET_USER_POSTS:
