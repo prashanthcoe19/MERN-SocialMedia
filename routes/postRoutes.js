@@ -17,7 +17,9 @@ router.route('/unlike').put(auth, postController.unlike);
 
 router.route('/comment').put(auth, postController.addComment);
 
-router.route('/uncomment').put(auth, postController.deleteComment);
+router
+  .route('/comment/:postId/:commentId')
+  .delete(auth, postController.deleteComment);
 
 router.route('/by').get(auth, postController.listByUser);
 

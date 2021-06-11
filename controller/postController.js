@@ -157,26 +157,47 @@ const addComment = async (req, res) => {
 // @route api/post/uncomment
 const deleteComment = async (req, res) => {
   try {
-    const comment = {
-      text: req.body.text,
-      postedBy: req.user._id,
-    };
-    let result = await Post.findByIdAndUpdate(
-      req.body.postId,
-      {
-        $pull: { comments: comment },
-      },
-      {
-        new: true,
-      }
-    )
-      .populate('comments.postedBy', '_id name')
-      .populate('postedBy', '_id name')
-      .exec();
-    res.json(result);
+    const post = await Post.findById(req.params.postId);
+    // console.log(req.params.postId);
+    // console.log(req.params.commentId);
+    // console.log(post);
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.commentId
+    );
+
+    if (comment.postedBy._id.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+    post.comments = post.comments.filter(
+      ({ id }) => id !== req.params.commentId
+    );
+    await post.save();
+    return res.json(post);
   } catch (err) {
-    return res.status(422).json({ error: err });
+    console.log(err.message);
+    return res.status(500).send('Server Error');
   }
+  // try {
+  //   const comment = {
+  //     text: req.body.text,
+  //     postedBy: req.user._id,
+  //   };
+  //   let result = await Post.findByIdAndUpdate(
+  //     req.body.postId,
+  //     {
+  //       $pull: { comments: comment },
+  //     },
+  //     {
+  //       new: true,
+  //     }
+  //   )
+  //     .populate('comments.postedBy', '_id name')
+  //     .populate('postedBy', '_id name')
+  //     .exec();
+  //   res.json(result);
+  // } catch (err) {
+  //   return res.status(422).json({ error: err });
+  // }
 };
 
 // @desc delete a post

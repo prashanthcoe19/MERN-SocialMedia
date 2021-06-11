@@ -56,7 +56,13 @@ function postReducer(state = initialState, action) {
     case UNCOMMENT:
       return {
         ...state,
-        post: { ...state.post },
+        post: {
+          ...state.post,
+          post: { ...state.post, comments: payload.comments },
+          // comments: state.post.comments.filter(
+          //   (comment) => comment._id !== payload
+          // ),
+        },
         loading: false,
       };
     // case GET_USER_POSTS:

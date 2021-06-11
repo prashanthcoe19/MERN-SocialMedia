@@ -130,14 +130,20 @@ export const comment = (text, postId) => async (dispatch) => {
     });
   }
 };
-export const uncomment = () => async (dispatch) => {
+export const uncomment = (postId, commentId) => async (dispatch) => {
   try {
-    let res = await axios.put(`/api/post/comment`);
+    let res = await axios.delete(`/api/post/comment/${postId}/${commentId}`);
     dispatch({
-      type: GET_POST,
+      type: UNCOMMENT,
       payload: res.data,
     });
+    dispatch(setAlert('Comment Removed', 'success'));
+    dispatch(newsFeed());
   } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    }
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },

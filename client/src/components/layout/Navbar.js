@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Logout from './Logout';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 const Navbar = ({ isAuthenticated }) => {
@@ -22,6 +22,18 @@ const Navbar = ({ isAuthenticated }) => {
                 {' '}
                 <span />
                 Profile
+              </i>
+            </Button>
+          </Link>
+        </li>{' '}
+        <span />
+        <li class='nav-item' style={{ marginRight: '10px' }}>
+          <Link to='/newsfeed'>
+            <Button variant='edit-button'>
+              <i class='fas fa-home' style={{ textDecoration: 'none' }}>
+                {' '}
+                <span />
+                News Feed
               </i>
             </Button>
           </Link>

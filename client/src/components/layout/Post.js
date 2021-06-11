@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import '../private/dashboard.css';
-import { comment } from '../../actions/post';
+import { comment, uncomment } from '../../actions/post';
 import { connect } from 'react-redux';
 const Post = ({
   post: { text, photo, postedBy, likes, comments, _id },
   comment,
+  uncomment,
+  user,
 }) => {
   const [com, setCom] = useState();
   const handleChange = (e) => {
@@ -16,6 +18,11 @@ const Post = ({
     comment(com, _id);
     setCom('');
   };
+
+  // const deleteComment = (e) => {
+  //   e.preventDefault();
+  //   uncomment(com, _id);
+  // };
   return (
     <div class='container px-4 py-5 mx-auto'>
       <div class='card cardm'>
@@ -58,11 +65,20 @@ const Post = ({
         </div>{' '}
         <div class='p-2'>
           {/* <p>View all {comments && comments.length} comments</p> */}
-          {comments.map((comment) => {
+          {comments.map((comment, i) => {
             return (
-              <p>
-                <strong>{comment.postedBy.name}</strong> <span /> {comment.text}
-              </p>
+              <Fragment key={i}>
+                <p key={i}>
+                  <strong>{comment.postedBy.name}</strong> <span />{' '}
+                  {comment.text} <span />{' '}
+                  {comment.postedBy.id === user.id ? (
+                    <i
+                      class='fas fa-trash'
+                      onClick={() => uncomment(_id, comment._id)}
+                    ></i>
+                  ) : null}
+                </p>
+              </Fragment>
             );
           })}
         </div>
@@ -88,6 +104,12 @@ const Post = ({
 Post.propTypes = {
   post: PropTypes.object.isRequired,
   comment: PropTypes.func.isRequired,
+  uncomment: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
-export default connect(null, { comment })(Post);
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, { comment, uncomment })(Post);
