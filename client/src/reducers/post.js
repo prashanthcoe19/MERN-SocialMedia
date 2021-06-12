@@ -1,8 +1,6 @@
 import {
   NEW_POST,
   DELETE_POST,
-  LIKE,
-  UNLIKE,
   COMMENT,
   UNCOMMENT,
   NEWS_FEED,
@@ -10,6 +8,7 @@ import {
   GET_POSTS,
   POST_ERROR,
   GET_USER_POSTS,
+  UPDATE_LIKES,
 } from '../actions/types';
 
 const initialState = {
@@ -65,12 +64,14 @@ function postReducer(state = initialState, action) {
         },
         loading: false,
       };
-    // case GET_USER_POSTS:
-    //   return {
-    //     ...state,
-    //     userposts: payload,
-    //     loading: false,
-    //   };
+    case UPDATE_LIKES:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === payload.id ? { ...post, likes: payload.likes } : post
+        ),
+        loading: false,
+      };
     case POST_ERROR:
       return {
         ...state,

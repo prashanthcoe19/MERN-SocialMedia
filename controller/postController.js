@@ -86,19 +86,16 @@ const newsFeed = async (req, res) => {
 // @route api/post/like
 const like = async (req, res) => {
   try {
-    let likes = await Post.findByIdAndUpdate(
-      req.body.postId,
-      {
-        $push: {
-          likes: req.user._id,
-        },
-      },
-      {
-        new: true,
-      }
-    );
-    res.json(likes);
+    const post = await Post.findById(req.params.id);
+    console.log(post);
+    if (post.likes.some((like) => like.user.toString() === req.user.id)) {
+      return res.status(400).json({ msg: 'Post is already liked' });
+    }
+    post.likes.unshift({ user: req.user.id });
+    await post.save();
+    return res.json(post.likes);
   } catch (err) {
+    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -108,19 +105,18 @@ const like = async (req, res) => {
 // @route api/post/unlike
 const unlike = async (req, res) => {
   try {
-    let unlikes = await Post.findByIdAndUpdate(
-      req.body.postId,
-      {
-        $pull: {
-          likes: req.user._id,
-        },
-      },
-      {
-        new: true,
-      }
+    const post = await Post.findById(req.params.id);
+
+    if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
+      return res.status(400).json({ msg: 'Post has not been liked yet' });
+    }
+    post.likes = post.likes.filter(
+      ({ user }) => user.toString() !== req.user.id
     );
-    res.json(unlikes);
+    await post.save();
+    return res.json(post.likes);
   } catch (err) {
+    console.log(err.message);
     res.status(500).send('Server Error');
   }
 };
@@ -158,9 +154,6 @@ const addComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
-    // console.log(req.params.postId);
-    // console.log(req.params.commentId);
-    // console.log(post);
     const comment = post.comments.find(
       (comment) => comment.id === req.params.commentId
     );

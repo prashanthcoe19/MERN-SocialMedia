@@ -11,12 +11,11 @@ router.route('/newsfeed').get(auth, postController.newsFeed);
 
 router.route('/deletePost').delete(auth, postController.deletePost);
 
-router.route('/like').put(auth, postController.like);
-
-router.route('/unlike').put(auth, postController.unlike);
-
 router.route('/comment').put(auth, postController.addComment);
 
+router.route('/like/:id').put(auth, postController.like);
+
+router.route('/unlike/:id').put(auth, postController.unlike);
 router
   .route('/comment/:postId/:commentId')
   .delete(auth, postController.deleteComment);
