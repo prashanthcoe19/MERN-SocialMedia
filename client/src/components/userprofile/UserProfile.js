@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -34,7 +34,7 @@ const UserProfile = ({
 
   // if (loading) return <Spinner />;
 
-  if (user._id == match.params.id) {
+  if (user._id === match.params.id) {
     return <Redirect to='/dashboard' />;
   }
   return (
@@ -68,7 +68,7 @@ const UserProfile = ({
               <p>
                 {loading ? (
                   <Spinner />
-                ) : user.following.length == 0 ? (
+                ) : user.following.length === 0 ? (
                   <Button variant='edit-button' onClick={followUser}>
                     Follow
                   </Button>

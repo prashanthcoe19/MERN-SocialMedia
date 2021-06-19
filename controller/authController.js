@@ -6,10 +6,10 @@ const login = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ msg: 'email not found' });
+      res.status(400).send('email not found');
     }
     if (!(await user.matchPassword(password))) {
-      return res.status(400).json({ msg: 'pwd wrong' });
+      res.status(400).send('pwd wrong');
     }
     res.json({
       user,

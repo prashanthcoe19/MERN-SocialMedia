@@ -5,7 +5,8 @@ const create = async (req, res) => {
   try {
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+      console.error('User already exists');
+      res.status(400).send('User already exists');
     }
     user = new User({
       name,
@@ -84,6 +85,21 @@ const updatePicture = async (req, res) => {
   }
 };
 
+const searchUser = async (req, res) => {
+  try {
+    let regex = new RegExp(req.params.name, 'i');
+    let users = await User.find({ name: regex });
+    if (!users) {
+      return res.status('400').json({
+        error: 'User not found',
+      });
+    }
+    return res.json(users);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+};
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -201,4 +217,5 @@ export default {
   follow,
   unfollow,
   userByID,
+  searchUser,
 };

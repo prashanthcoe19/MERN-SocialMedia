@@ -23,14 +23,13 @@ export const newsFeed = () => async (dispatch) => {
       type: NEWS_FEED,
       payload: res.data,
     });
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -43,10 +42,13 @@ export const newPost = (newpost) => async (dispatch) => {
       type: NEW_POST,
       payload: res.data,
     });
-  } catch (err) {
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => alert(error.msg, 'danger'));
+    }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -57,16 +59,14 @@ export const getPostByUser = () => async (dispatch) => {
     // console.log(res);
     dispatch({
       type: GET_POSTS,
-      payload: res.data,
     });
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -79,14 +79,13 @@ export const getPostByUserId = (id) => async (dispatch) => {
       type: GET_POSTS,
       payload: res.data,
     });
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -98,10 +97,13 @@ export const getPost = (id) => async (dispatch) => {
       type: GET_POST,
       payload: res.data,
     });
-  } catch (err) {
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => alert(error.msg, 'danger'));
+    }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -122,10 +124,13 @@ export const comment = (text, postId) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(newsFeed());
-  } catch (err) {
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => alert(error.msg, 'danger'));
+    }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -138,14 +143,13 @@ export const uncomment = (postId, commentId) => async (dispatch) => {
     });
     dispatch(setAlert('Comment Removed', 'success'));
     dispatch(newsFeed());
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -158,14 +162,13 @@ export const addLike = (id) => async (dispatch) => {
       payload: { id, likes: res.data },
     });
     dispatch(newsFeed());
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
@@ -179,14 +182,13 @@ export const removeLike = (id) => async (dispatch) => {
       payload: { id, likes: res.data },
     });
     dispatch(newsFeed());
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };

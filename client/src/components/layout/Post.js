@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import '../private/dashboard.css';
 import { comment, uncomment, addLike, removeLike } from '../../actions/post';
@@ -12,6 +13,7 @@ const Post = ({
   user,
 }) => {
   const [com, setCom] = useState();
+  const [like, setLike] = useState();
   const handleChange = (e) => {
     setCom(e.target.value);
   };
@@ -33,10 +35,12 @@ const Post = ({
       <div class='card cardm'>
         <div class='d-flex row-reverse justify-content-start align-items-center'>
           <div class='p-2'>
-            <img
-              class='rounded-circle rounded-photo'
-              src={`/uploads/${postedBy.photo}`}
-            />
+            <Link to={`/profile/${postedBy._id}`}>
+              <img
+                class='rounded-circle rounded-photo'
+                src={`/uploads/${postedBy.photo}`}
+              />
+            </Link>
           </div>
           <div class='p-2'>
             <h6>

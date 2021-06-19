@@ -18,6 +18,8 @@ router.route('/follow').put(auth, userController.follow);
 
 router.route('/unfollow').put(auth, userController.unfollow);
 
+router.route('/search/:name').get(auth, userController.searchUser);
+
 router
   .route('/:userId')
   .get(userController.userByID)

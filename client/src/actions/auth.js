@@ -10,10 +10,13 @@ import {
   BIO_UPDATED,
   BIO_UPDATED_FAIL,
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_ERROR,
   FOLLOW,
   UNFOLLOW,
   FOLLOW_ERROR,
+  SEARCH_ERROR,
+  SEARCH_RESULTS,
 } from './types';
 import { setAlert } from './alert';
 import setAuthToken from '../utilities/setAuthToken';
@@ -29,7 +32,12 @@ export const loadUser = () => async (dispatch) => {
       type: USER_LOADED,
       payload: res.data,
     });
-  } catch (err) {
+  } catch (error) {
+    const errors = error.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => alert(error.msg, 'danger'));
+    }
     dispatch({
       type: AUTH_ERROR,
     });
@@ -52,14 +60,15 @@ export const register =
         payload: res.data,
       });
       dispatch(loadUser());
-    } catch (err) {
-      const errors = err.response.data.errors;
+    } catch (error) {
+      const errors = error.response.data.errors;
       if (errors) {
-        alert('Error uploading picture');
-        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+        errors.forEach((error) => alert(error.msg, 'danger'));
       }
+      // console.log(error.response.data);
       dispatch({
         type: REGISTER_FAIL,
+        payload: errors,
       });
     }
   };
@@ -81,10 +90,11 @@ export const login =
         payload: res.data,
       });
       dispatch(loadUser());
-    } catch (err) {
-      const errors = err.response.data.errors;
+    } catch (error) {
+      const errors = error.response.data.errors;
+      console.log(errors);
       if (errors) {
-        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+        errors.forEach((error) => alert(error.msg, 'danger'));
       }
       dispatch({
         type: LOGIN_FAIL,
@@ -102,10 +112,10 @@ export const update = (data) => async (dispatch) => {
     });
     dispatch(setAlert('Profile Updated', 'success'));
     dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: BIO_UPDATED_FAIL,
@@ -120,10 +130,10 @@ export const getProfileById = (id) => async (dispatch) => {
       type: GET_PROFILE,
       payload: res.data,
     });
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: PROFILE_ERROR,
@@ -148,10 +158,10 @@ export const follow = (followId) => async (dispatch) => {
       payload: res.data,
     });
     // dispatch(loadUser());
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: FOLLOW_ERROR,
@@ -175,13 +185,49 @@ export const unfollow = (unfollowId) => async (dispatch) => {
       type: UNFOLLOW,
       payload: res.data,
     });
-  } catch (err) {
-    const errors = err.response.data.errors;
+  } catch (error) {
+    const errors = error.response.data.errors;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => alert(error.msg, 'danger'));
     }
     dispatch({
       type: FOLLOW_ERROR,
+    });
+  }
+};
+export const listUsers = () => async (dispatch) => {
+  try {
+    let res = await axios.get(`/api/users`);
+    console.log(res);
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data,
+    });
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => alert(error.msg, 'danger'));
+    }
+    dispatch({
+      type: PROFILE_ERROR,
+    });
+  }
+};
+export const searchUsers = (name) => async (dispatch) => {
+  try {
+    let res = await axios.get(`/api/users/search/${name}`);
+    console.log(res.data);
+    dispatch({
+      type: SEARCH_RESULTS,
+      payload: res.data,
+    });
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => alert(error.msg, 'danger'));
+    }
+    dispatch({
+      type: SEARCH_ERROR,
     });
   }
 };

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { register } from '../../actions/auth';
 import '../signin.css';
 import { setAlert } from '../../actions/alert';
-const Register = ({ register, isAuthenticated }) => {
+const Register = ({ register, isAuthenticated, errors }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -125,6 +125,7 @@ Register.propTypes = {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  errors: state.auth.errors,
 });
 
 export default connect(mapStateToProps, { register })(Register);

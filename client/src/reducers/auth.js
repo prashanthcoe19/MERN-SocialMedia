@@ -20,6 +20,7 @@ const initialState = {
   isAuthenticated: false,
   loading: true,
   user: {},
+  errors: {},
 };
 
 function authReducer(state = initialState, action) {
@@ -80,6 +81,7 @@ function authReducer(state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         user: null,
+        errors: action.payload,
       };
     case LOG_OUT:
       localStorage.removeItem('token');

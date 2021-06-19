@@ -7,6 +7,7 @@ import PrivateRoute from './PrivateRoute';
 import Dashboard from '../private/Dashboard';
 import NewsFeed from '../layout/Newsfeed';
 import UserProfile from '../userprofile/UserProfile';
+import Search from '../layout/Search';
 
 const Routes = (props) => {
   return (
@@ -15,6 +16,7 @@ const Routes = (props) => {
         <Route exact path='/register' component={Register} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/profile/:id' component={UserProfile} />
+        <PrivateRoute expact path='/searchresults' component={Search} />
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
         <PrivateRoute exact path='/newsfeed' component={NewsFeed} />
         <Route component={NotFound} />
