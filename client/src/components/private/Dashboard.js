@@ -8,16 +8,22 @@ import './dashboard.css';
 import { Redirect } from 'react-router';
 import { getPostByUser } from '../../actions/post';
 import Posts from '../layout/Posts';
+import Spinner from '../layout/Spinner';
 
-const Dashboard = ({ user, isAuthenticated, posts, getPostByUser }) => {
+const Dashboard = ({
+  user,
+  isAuthenticated,
+  posts,
+  getPostByUser,
+  loading,
+}) => {
   useEffect(() => {
     getPostByUser();
   }, [getPostByUser]);
-
   if (isAuthenticated === false) {
     return <Redirect to='/login' />;
   }
-
+  if (loading) return <Spinner />;
   return (
     <Fragment>
       <div class='container px-4 py-5 mx-auto'>
@@ -48,7 +54,7 @@ const Dashboard = ({ user, isAuthenticated, posts, getPostByUser }) => {
               exists so must check content first */}
               <h6 class='text-left user-name'>{user && user.name}</h6>
               <p>{user && user.bio}</p>
-              <EditProfile />
+              <EditProfile username={user.name} userbio={user.bio} />
               <NewPost />
             </div>
             <div class='p-2'>
@@ -88,6 +94,7 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   isAuthenticated: state.auth.isAuthenticated,
   posts: state.post.posts,
+  loading: state.post.loading,
 });
 
 export default connect(mapStateToProps, { getPostByUser })(Dashboard);

@@ -91,10 +91,11 @@ export const login =
       });
       dispatch(loadUser());
     } catch (error) {
-      const errors = error.response.data.errors;
+      const errors = error.response.data;
       console.log(errors);
+
       if (errors) {
-        errors.forEach((error) => alert(error.msg, 'danger'));
+        alert(errors, 'danger');
       }
       dispatch({
         type: LOGIN_FAIL,

@@ -5,15 +5,12 @@ import { Button, Modal } from 'react-bootstrap';
 import { update } from '../../actions/auth';
 import '../private/dashboard.css';
 
-const EditProfile = ({ update }) => {
+const EditProfile = ({ update, username, userbio }) => {
   const [show, setShow] = useState(false);
-
-  const [name, setName] = useState();
-  const [bio, setBio] = useState();
+  const [name, setName] = useState(username);
+  const [bio, setBio] = useState(userbio);
   const [photo, setPhoto] = useState(null);
-
   const handlePhoto = (e) => {
-    // const photo = e.target.files[0];
     setPhoto(e.target.files[0]);
   };
   const onSubmit = async (e) => {
@@ -23,8 +20,6 @@ const EditProfile = ({ update }) => {
     data.append('bio', bio);
     data.append('file', photo);
 
-    console.log(photo);
-    // const { name, bio, photo } = newFormData;
     update(data);
   };
   const handleClose = () => {
@@ -36,11 +31,7 @@ const EditProfile = ({ update }) => {
   };
   return (
     <Fragment>
-      <Button
-        // class='edit-button'
-        variant='edit-button'
-        onClick={handleShow}
-      >
+      <Button variant='edit-button' onClick={handleShow}>
         Edit Profile <span />
         <i class='fas fa-edit'></i>
       </Button>{' '}
@@ -59,10 +50,9 @@ const EditProfile = ({ update }) => {
                 name='name'
                 placeholder='Name'
                 class='form-control'
-                defaultValue={name}
-                onBlur={(e) => {
-                  const { value } = e.target;
-                  setName(value);
+                defaultValue={username}
+                onChange={(e) => {
+                  setName(e.target.value);
                 }}
               />{' '}
             </div>
@@ -75,10 +65,9 @@ const EditProfile = ({ update }) => {
                 name='bio'
                 placeholder='Bio'
                 class='form-control'
-                value={bio}
+                defaultValue={userbio}
                 onChange={(e) => {
-                  const { value } = e.target;
-                  setBio(value);
+                  setBio(e.target.value);
                 }}
               />{' '}
             </div>
@@ -111,4 +100,10 @@ const EditProfile = ({ update }) => {
 EditProfile.propTypes = {
   update: PropTypes.func.isRequired,
 };
+
+// const mapStateToProps = (state) => {
+//   return {
+//     user: state.auth.user,
+//   };
+// };
 export default connect(null, { update })(EditProfile);

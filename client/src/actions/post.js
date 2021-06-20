@@ -59,6 +59,7 @@ export const getPostByUser = () => async (dispatch) => {
     // console.log(res);
     dispatch({
       type: GET_POSTS,
+      payload: res.data,
     });
   } catch (error) {
     const errors = error.response.data.errors;
